@@ -1,0 +1,88 @@
+{
+	"PROCESS": {
+		"properties": {
+			"refId": {
+				"type": "keyword",
+				"include_in_all": false
+			},
+			"name": {
+				"type": "text"
+			},
+			"category": {
+				"type": "text"
+			},
+			"dataSetUrl": {
+				"type": "text",
+				"include_in_all": false
+			},
+			"processType": {
+				"type": "keyword"
+			},
+			"completeness": {
+				"type": "text"
+			},
+			"sampleRepresentativeness": {
+				"type": "text"
+			},
+			"samplingProcedure": {
+				"type": "text"
+			},
+			"validFrom": {
+				"type": "date",
+				"include_in_all": false
+			},
+			"validUntil": {
+				"type": "date",
+				"include_in_all": false
+			},
+			"location": {
+				"type": "keyword"
+			},
+			"technology": {
+				"type": "text"
+			},
+			"supportedNomenclatures": {
+				"type": "keyword"
+			},
+			"representativeness": {
+				"type": "text"
+			},
+			"modellingPrinciple": {
+				"type": "keyword"
+			},
+			"modellingApproach": {
+				"type": "keyword"
+			},
+			"biogenicCarbon": {
+				"type": "text"
+			},
+			"reviewed": {
+				"type": "boolean"
+			},
+			"reviewer": {
+				"type": "text"
+			},
+			"aggregationType": {
+				"type": "keyword"
+			},
+			"copyrightProtected": {
+				"type": "boolean"
+			},
+			"copyrightHolder": {
+				"type": "text"
+			},
+			"licenseType": {
+				"type": "keyword"
+			},
+			"license": {
+				"type": "text"
+			},
+			"contact": {
+				"type": "text"
+			},
+			"description": {
+				"type": "text"
+			}
+		}
+	}
+}

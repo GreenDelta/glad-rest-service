@@ -7,6 +7,14 @@
 	<listener>
 		<listener-class>com.greendelta.lca.search.rest.SearchInitializer</listener-class>
 	</listener>
+	<filter>
+		<filter-name>AppKeyFilter</filter-name>
+		<filter-class>com.greendelta.lca.search.rest.AppKeyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AppKeyFilter</filter-name>
+		<url-pattern>/search/index/*</url-pattern>
+	</filter-mapping>
 	<servlet>
 		<servlet-name>LCA Search REST Service</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>

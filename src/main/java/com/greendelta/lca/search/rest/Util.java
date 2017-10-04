@@ -1,5 +1,9 @@
 package com.greendelta.lca.search.rest;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.core.UriInfo;
+
+import org.apache.logging.log4j.core.util.IOUtils;
 
 import com.greendelta.lca.search.aggregations.SearchAggregation;
 import com.sun.jersey.api.uri.UriComponent;
@@ -156,6 +162,19 @@ class Util {
 		if (Aggregations.FORMAT.name.equals(filter))
 			return Defs.FORMATS;
 		return null;
+	}
+
+	static String getResource(String name) {
+		InputStream stream = Util.class.getResourceAsStream(name);
+		if (stream == null)
+			return null;
+		StringWriter writer = new StringWriter();
+		try {
+			IOUtils.copy(new InputStreamReader(stream), writer);
+		} catch (IOException e) {
+			return null;
+		}
+		return writer.toString();
 	}
 
 }

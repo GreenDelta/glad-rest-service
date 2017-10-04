@@ -1,9 +1,6 @@
 package com.greendelta.lca.search.rest;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +8,6 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.logging.log4j.core.util.IOUtils;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.Settings.Builder;
 import org.elasticsearch.node.Node;
@@ -51,23 +47,11 @@ public class SearchInitializer implements ServletContextListener {
 	private static void createClient() {
 		client = new EsClient(node.client());
 		Map<String, Object> settings = new HashMap<>();
-		settings.put(EsSettings.CONFIG, getResource("es-settings.json"));
-		settings.put(EsSettings.MAPPINGS, Collections.singletonMap("PROCESS", getResource("es-fields.json")));
+		settings.put(EsSettings.CONFIG, Util.getResource("es-settings.json"));
+		settings.put(EsSettings.MAPPINGS, Collections.singletonMap("PROCESS", Util.getResource("es-fields.json")));
 		client.create(settings);
 	}
 
-	private static String getResource(String name) {
-		InputStream stream = SearchInitializer.class.getResourceAsStream(name);
-		if (stream == null)
-			return null;
-		StringWriter writer = new StringWriter();
-		try {
-			IOUtils.copy(new InputStreamReader(stream), writer);
-		} catch (IOException e) {
-			return null;
-		}
-		return writer.toString();
-	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {

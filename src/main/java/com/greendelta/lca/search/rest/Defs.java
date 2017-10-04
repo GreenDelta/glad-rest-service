@@ -35,7 +35,7 @@ class Defs {
 	static final List<String> PROCESS_TYPES = new ArrayList<>(Arrays.asList(
 			"UNIT", "SYSTEM", "UNKNOWN"));
 	static final List<String> FORMATS = new ArrayList<>(Arrays.asList(
-			"ILCD", "JSON-LD", "UNKNOWN"));
+			"ILCD", "JSON-LD", "OTHER", "UNKNOWN"));
 	static final Map<String, String> DEFAULT_VALUES = new HashMap<>();
 
 	static {

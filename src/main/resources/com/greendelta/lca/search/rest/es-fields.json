@@ -18,6 +18,9 @@
 			"processType": {
 				"type": "keyword"
 			},
+			"format": {
+				"type": "keyword"
+			},
 			"completeness": {
 				"type": "text"
 			},

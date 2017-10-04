@@ -101,6 +101,13 @@ class Util {
 				return error;
 			}
 		}
+		for (String key : Defs.REQUIRED_FIELDS) {
+			if (data.get(key) != null && !data.get(key).toString().isEmpty())
+				continue;
+			if (!Defs.DEFAULT_VALUES.containsKey(key))
+				return "Missing value for required field '" + key + "'";
+			data.put(key, Defs.DEFAULT_VALUES.get(key));
+		}
 		return null;
 	}
 
@@ -146,6 +153,8 @@ class Util {
 			return Defs.MODELLING_PRINCIPLES;
 		if (Aggregations.MODELLING_APPROACH.name.equals(filter))
 			return Defs.MODELLING_APPROACHES;
+		if (Aggregations.FORMAT.name.equals(filter))
+			return Defs.FORMATS;
 		return null;
 	}
 

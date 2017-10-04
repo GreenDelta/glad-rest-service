@@ -14,9 +14,10 @@ class Aggregations {
 	static final TermsAggregation NOMENCLATURE = term("supportedNomenclatures", "supportedNomenclatures");
 	static final TermsAggregation AGGREGATION_TYPE = term("aggregationType", "aggregationType");
 	static final TermsAggregation LICENSE_TYPE = term("licenseType", "licenseType");
+	static final TermsAggregation FORMAT = term("supportedFormats", "supportedFormats");
 
 	static final SearchAggregation[] ALL = {
-			PROCESS_TYPE, MODELLING_PRINCIPLE, MODELLING_APPROACH, NOMENCLATURE, AGGREGATION_TYPE, LICENSE_TYPE
+			PROCESS_TYPE, MODELLING_PRINCIPLE, MODELLING_APPROACH, NOMENCLATURE, AGGREGATION_TYPE, LICENSE_TYPE, FORMAT
 	};
 
 	static final Map<String, SearchAggregation> AS_MAP;

@@ -29,7 +29,7 @@ public class SearchInitializer implements ServletContextListener {
 	}
 
 	private static void createNode() {
-		String home = "/opt/search";
+		String home = Util.getProperty("search.home");
 		Builder settingsBuilder = Settings.builder()
 				.put("http.enabled", "false")
 				.put("transport.type", "local")

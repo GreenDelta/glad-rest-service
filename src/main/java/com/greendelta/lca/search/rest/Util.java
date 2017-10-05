@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.UriInfo;
@@ -18,6 +19,16 @@ import com.greendelta.lca.search.aggregations.SearchAggregation;
 import com.sun.jersey.api.uri.UriComponent;
 
 class Util {
+
+	private static final Properties PROPERTIES = new Properties();
+
+	static {
+		try {
+			PROPERTIES.load(Util.class.getResourceAsStream("app.properties"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	static Map<String, Set<String>> getQueryParameters(UriInfo uriInfo) {
 		Map<String, Set<String>> filters = new HashMap<>();
@@ -175,6 +186,10 @@ class Util {
 			return null;
 		}
 		return writer.toString();
+	}
+
+	static String getProperty(String key) {
+		return PROPERTIES.getProperty(key);
 	}
 
 }

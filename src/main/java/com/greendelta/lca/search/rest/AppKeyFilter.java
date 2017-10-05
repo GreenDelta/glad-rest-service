@@ -18,7 +18,7 @@ public class AppKeyFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		API_KEY = Util.getResource("api.key");
+		API_KEY = Util.getProperty("api.key");
 	}
 
 	@Override

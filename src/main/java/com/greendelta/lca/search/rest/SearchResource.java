@@ -57,7 +57,7 @@ public class SearchResource {
 			SearchAggregation aggregation = Aggregations.AS_MAP.get(filter);
 			for (String value : filters.get(filter)) {
 				if (aggregation == null) {
-					builder.filter(filter, value, Type.WILDCART);
+					builder.filter(filter, Type.WILDCART, value);
 				} else {
 					builder.aggregation(aggregation, value);
 				}

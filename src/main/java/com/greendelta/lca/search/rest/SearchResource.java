@@ -41,7 +41,7 @@ public class SearchResource {
 		if (error != null) {
 			return Response.status(Status.BAD_REQUEST).entity(error).build();
 		}
-		SearchResult result = client.search(createQuery(query, page, pageSize, parameters));
+		SearchResult<Map<String, Object>> result = client.search(createQuery(query, page, pageSize, parameters));
 		return Response.ok(result).build();
 	}
 

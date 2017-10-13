@@ -40,15 +40,13 @@ public class IndexResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response post(Map<String, Object> content) {
-		if (content.get("refId") == null)
-			return Response.status(422).entity("refId field did not match id in url").build();
+		String error = Util.checkValues(content);
+		if (error != null)
+			return Response.status(422).entity(error).build();
 		String id = content.get("refId").toString();
 		boolean exists = client.get("PROCESS", id) != null;
 		if (exists)
 			return Response.status(Status.CONFLICT).location(url("search/" + id)).build();
-		String error = Util.checkValues(content);
-		if (error != null)
-			return Response.status(422).entity(error).build();
 		client.index("PROCESS", id, content);
 		return Response.created(url(id)).build();
 	}

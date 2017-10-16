@@ -2,8 +2,7 @@
 	"PROCESS": {
 		"properties": {
 			"refId": {
-				"type": "keyword",
-				"include_in_all": false
+				"type": "keyword"
 			},
 			"name": {
 				"type": "text"
@@ -12,8 +11,7 @@
 				"type": "text"
 			},
 			"dataSetUrl": {
-				"type": "text",
-				"include_in_all": false
+				"type": "text"
 			},
 			"processType": {
 				"type": "keyword"
@@ -31,12 +29,10 @@
 				"type": "text"
 			},
 			"validFrom": {
-				"type": "date",
-				"include_in_all": false
+				"type": "date"
 			},
 			"validUntil": {
-				"type": "date",
-				"include_in_all": false
+				"type": "date"
 			},
 			"location": {
 				"type": "keyword"

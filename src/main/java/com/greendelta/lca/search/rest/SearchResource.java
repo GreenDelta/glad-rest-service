@@ -47,7 +47,7 @@ public class SearchResource {
 
 	private SearchQuery createQuery(String query, int page, int pageSize, Map<String, Set<String>> filters) {
 		SearchQueryBuilder builder = new SearchQueryBuilder()
-				.query(query)
+				.query(query, Defs.FULL_TEXT_FIELDS)
 				.page(page)
 				.pageSize(pageSize);
 		for (SearchAggregation aggregation : Aggregations.ALL) {
@@ -57,7 +57,7 @@ public class SearchResource {
 			SearchAggregation aggregation = Aggregations.AS_MAP.get(filter);
 			for (String value : filters.get(filter)) {
 				if (aggregation == null) {
-					builder.filter(filter, Type.WILDCART, value);
+					builder.filter(filter, value, Type.WILDCART);
 				} else {
 					builder.aggregation(aggregation, value);
 				}

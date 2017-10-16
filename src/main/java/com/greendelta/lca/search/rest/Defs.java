@@ -37,6 +37,10 @@ class Defs {
 	static final List<String> FORMATS = new ArrayList<>(Arrays.asList(
 			"ILCD", "JSON-LD", "OTHER", "UNKNOWN"));
 	static final Map<String, String> DEFAULT_VALUES = new HashMap<>();
+	static final String[] FULL_TEXT_FIELDS = {
+			"name", "category", "location", "completeness", "sampleRepresentativeness", "samplingProcedure",
+			"technology", "representativeness", "biogenicCarbon", "reviewer", "copyrightHolder", "contact",
+			"description"};
 
 	static {
 		DEFAULT_VALUES.put("aggregationType", "UNKNOWN");

@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.greendelta.lca.search.SearchClient;
-import com.greendelta.lca.search.SearchFilterValue.Type;
+import com.greendelta.lca.search.SearchFilterValue;
 import com.greendelta.lca.search.SearchQuery;
 import com.greendelta.lca.search.SearchQueryBuilder;
 import com.greendelta.lca.search.SearchResult;
@@ -57,7 +57,7 @@ public class SearchResource {
 			SearchAggregation aggregation = Aggregations.AS_MAP.get(filter);
 			for (String value : filters.get(filter)) {
 				if (aggregation == null) {
-					builder.filter(filter, value, Type.WILDCART);
+					builder.filter(filter, SearchFilterValue.wildcard(value));
 				} else {
 					builder.aggregation(aggregation, value);
 				}

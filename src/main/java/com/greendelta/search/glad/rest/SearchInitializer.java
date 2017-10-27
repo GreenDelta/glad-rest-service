@@ -1,4 +1,4 @@
-package com.greendelta.lca.search.rest;
+package com.greendelta.search.glad.rest;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -13,9 +13,9 @@ import org.elasticsearch.common.settings.Settings.Builder;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeValidationException;
 
-import com.greendelta.lca.search.SearchClient;
-import com.greendelta.lca.search.elasticsearch.EsClient;
-import com.greendelta.lca.search.elasticsearch.EsSettings;
+import com.greendelta.search.wrapper.SearchClient;
+import com.greendelta.search.wrapper.es.EsClient;
+import com.greendelta.search.wrapper.es.EsSettings;
 
 public class SearchInitializer implements ServletContextListener {
 

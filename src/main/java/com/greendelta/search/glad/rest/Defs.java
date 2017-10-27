@@ -1,4 +1,4 @@
-package com.greendelta.lca.search.rest;
+package com.greendelta.search.glad.rest;
 
 import java.util.ArrayList;
 import java.util.Arrays;

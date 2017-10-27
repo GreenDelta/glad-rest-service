@@ -1,4 +1,4 @@
-package com.greendelta.lca.search.rest;
+package com.greendelta.search.glad.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +15,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.logging.log4j.core.util.IOUtils;
 
-import com.greendelta.lca.search.aggregations.SearchAggregation;
+import com.greendelta.search.wrapper.aggregations.SearchAggregation;
 import com.sun.jersey.api.uri.UriComponent;
 
 class Util {

@@ -1,4 +1,4 @@
-package com.greendelta.lca.search.rest;
+package com.greendelta.search.glad.rest;
 
 import java.util.Map;
 import java.util.Set;
@@ -13,12 +13,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import com.greendelta.lca.search.SearchClient;
-import com.greendelta.lca.search.SearchFilterValue;
-import com.greendelta.lca.search.SearchQuery;
-import com.greendelta.lca.search.SearchQueryBuilder;
-import com.greendelta.lca.search.SearchResult;
-import com.greendelta.lca.search.aggregations.SearchAggregation;
+import com.greendelta.search.wrapper.SearchClient;
+import com.greendelta.search.wrapper.SearchFilterValue;
+import com.greendelta.search.wrapper.SearchQuery;
+import com.greendelta.search.wrapper.SearchQueryBuilder;
+import com.greendelta.search.wrapper.SearchResult;
+import com.greendelta.search.wrapper.aggregations.SearchAggregation;
 
 @Path("search")
 public class SearchResource {

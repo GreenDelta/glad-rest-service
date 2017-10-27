@@ -1,10 +1,10 @@
-package com.greendelta.lca.search.rest;
+package com.greendelta.search.glad.rest;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.greendelta.lca.search.aggregations.SearchAggregation;
-import com.greendelta.lca.search.aggregations.TermsAggregation;
+import com.greendelta.search.wrapper.aggregations.SearchAggregation;
+import com.greendelta.search.wrapper.aggregations.TermsAggregation;
 
 class Aggregations {
 

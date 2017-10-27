@@ -1,4 +1,4 @@
-package com.greendelta.lca.search.rest;
+package com.greendelta.search.glad.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.greendelta.lca.search.SearchClient;
+import com.greendelta.search.wrapper.SearchClient;
 
 @Path("search/index")
 public class IndexResource {

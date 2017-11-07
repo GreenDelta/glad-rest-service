@@ -2,11 +2,11 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>LCA Search REST Service</display-name>
   <listener>
-    <listener-class>com.greendelta.lca.search.rest.SearchInitializer</listener-class>
+    <listener-class>com.greendelta.search.glad.rest.SearchInitializer</listener-class>
   </listener>
   <filter>
     <filter-name>AppKeyFilter</filter-name>
-    <filter-class>com.greendelta.lca.search.rest.AppKeyFilter</filter-class>
+    <filter-class>com.greendelta.search.glad.rest.AppKeyFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>AppKeyFilter</filter-name>
@@ -17,7 +17,7 @@
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
     <init-param>
       <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>com.greendelta.lca.search.rest</param-value>
+      <param-value>com.greendelta.search.glad.rest</param-value>
     </init-param>
     <init-param>
       <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>

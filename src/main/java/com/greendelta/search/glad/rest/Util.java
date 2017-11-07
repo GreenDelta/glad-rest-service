@@ -75,21 +75,18 @@ class Util {
 	static String checkParameters(Map<String, Set<String>> parameters) {
 		for (String key : parameters.keySet()) {
 			for (String value : parameters.get(key)) {
-				if (Defs.LONG_FIELDS.contains(key)) {
-					return "No filtering supported for field '" + key + "'";
+				String message = null;
+				if (Defs.TIME_FIELDS.contains(key)) {
+					message = checkTime(key, value);
 				} else if (Defs.BOOLEAN_FIELDS.contains(key)) {
-					String message = checkBoolean(key, value);
-					if (message != null) {
-						return message;
-					}
+					message = checkBoolean(key, value);
 				} else if (Defs.STRING_FIELDS.contains(key)) {
-					List<String> valid = getValidValues(key);
-					if (valid != null && !valid.contains(value)) {
-						return "Value '" + value + "' is unsupported for field '" + key + "', valid values are: "
-								+ join(valid);
-					}
+					message = checkString(key, value);
 				} else {
-					return "Unsupported field '" + key + "'";
+					message = "Unsupported field '" + key + "'";
+				}
+				if (message == null) {
+					return message;
 				}
 			}
 		}
@@ -109,7 +106,7 @@ class Util {
 			String error = null;
 			if (Defs.BOOLEAN_FIELDS.contains(key)) {
 				error = checkBoolean(key, data.get(key));
-			} else if (Defs.LONG_FIELDS.contains(key)) {
+			} else if (Defs.TIME_FIELDS.contains(key)) {
 				error = checkLong(key, data.get(key));
 			} else if (!Defs.STRING_FIELDS.contains(key)) {
 				error = "Unsupported field '" + key + "'";
@@ -137,6 +134,21 @@ class Util {
 		return null;
 	}
 
+	private static String checkTime(String key, Object v) {
+		String value = v.toString();
+		if (!value.contains(",")) {
+			if (value.startsWith("<") || value.startsWith(">")) {
+				value = value.substring(1);
+			}
+			return checkLong(key, value);
+		}
+		int index = value.indexOf(',');
+		String message = checkLong(key, value.substring(0, index));
+		if (message != null)
+			return message;
+		return checkLong(key, value.substring(index + 1));
+	}
+
 	private static String checkLong(String key, Object v) {
 		if (v == null || v instanceof Long || v instanceof Integer)
 			return null;
@@ -146,6 +158,14 @@ class Util {
 			return "Value '" + v.toString() + "' for field '" + key + "' is not a long value";
 		}
 		return null;
+	}
+
+	private static String checkString(String key, Object v) {
+		String value = v.toString();
+		List<String> valid = getValidValues(key);
+		if (valid == null || valid.contains(value))
+			return null;
+		return "Value '" + value + "' is unsupported for field '" + key + "', valid values are: " + join(valid);
 	}
 
 	private static String join(List<String> values) {

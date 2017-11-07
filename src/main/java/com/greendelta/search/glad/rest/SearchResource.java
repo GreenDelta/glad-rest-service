@@ -1,5 +1,6 @@
 package com.greendelta.search.glad.rest;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.greendelta.search.wrapper.Conjunction;
 import com.greendelta.search.wrapper.SearchClient;
 import com.greendelta.search.wrapper.SearchFilterValue;
 import com.greendelta.search.wrapper.SearchQuery;
@@ -56,14 +58,33 @@ public class SearchResource {
 		for (String filter : filters.keySet()) {
 			SearchAggregation aggregation = Aggregations.AS_MAP.get(filter);
 			for (String value : filters.get(filter)) {
-				if (aggregation == null) {
-					builder.filter(filter, SearchFilterValue.wildcard(value));
-				} else {
+				boolean isLongField = Defs.TIME_FIELDS.contains(filter);
+				if (aggregation != null) {
 					builder.aggregation(aggregation, value);
+				} else if (!isLongField) {
+					builder.filter(filter, SearchFilterValue.wildcard(value));
+				} else if (value.startsWith(">")) {
+					builder.filter(filter, SearchFilterValue.from(Long.parseLong(value.substring(1))));
+				} else if (value.startsWith("<")) {
+					builder.filter(filter, SearchFilterValue.to(Long.parseLong(value.substring(1))));
+				} else if (value.contains(",")) {
+					builder.filter(filter, getRangeValueSet(value), Conjunction.AND);
+				} else {
+					builder.filter(filter, SearchFilterValue.is(Long.parseLong(value)));
 				}
 			}
 		}
 		return builder.build();
+	}
+
+	private Set<SearchFilterValue> getRangeValueSet(String value) {
+		int splitIndex = value.indexOf(',');
+		Long from = Long.parseLong(value.substring(0, splitIndex));
+		Long to = Long.parseLong(value.substring(splitIndex + 1));
+		Set<SearchFilterValue> values = new HashSet<>();
+		values.add(SearchFilterValue.from(from));
+		values.add(SearchFilterValue.to(to));
+		return values;
 	}
 
 }

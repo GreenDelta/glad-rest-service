@@ -13,7 +13,7 @@ class Defs {
 			"aggregationType", "licenseType", "name", "category", "location", "completeness",
 			"sampleRepresentativeness", "samplingProcedure", "technology", "representativeness", "biogenicCarbon",
 			"reviewer", "copyrightHolder", "license", "contact", "description", "dataSetUrl", "format"));
-	static final List<String> LONG_FIELDS = new ArrayList<>(Arrays.asList(
+	static final List<String> TIME_FIELDS = new ArrayList<>(Arrays.asList(
 			"validFrom", "validUntil"));
 	static final List<String> BOOLEAN_FIELDS = new ArrayList<>(Arrays.asList(
 			"reviewed", "copyrightProtected"));

@@ -70,7 +70,7 @@ public class SearchResource {
 				} else if (value.contains(",")) {
 					builder.filter(filter, getRangeValueSet(value), Conjunction.AND);
 				} else {
-					builder.filter(filter, SearchFilterValue.is(Long.parseLong(value)));
+					builder.filter(filter, SearchFilterValue.term(Long.parseLong(value)));
 				}
 			}
 		}

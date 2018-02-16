@@ -31,7 +31,7 @@ public class IndexResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response get(@PathParam("id") String id) {
-		Map<String, Object> data = client.get("PROCESS", id);
+		Map<String, Object> data = client.get(id);
 		if (data == null)
 			return Response.status(Status.NOT_FOUND).build();
 		return Response.ok(data).build();
@@ -44,10 +44,10 @@ public class IndexResource {
 		if (error != null)
 			return Response.status(422).entity(error).build();
 		String id = content.get("refId").toString();
-		boolean exists = client.get("PROCESS", id) != null;
+		boolean exists = client.get(id) != null;
 		if (exists)
 			return Response.status(Status.CONFLICT).location(url("search/" + id)).build();
-		client.index("PROCESS", id, content);
+		client.index(id, content);
 		return Response.created(url(id)).build();
 	}
 
@@ -55,13 +55,13 @@ public class IndexResource {
 	@Path("{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response put(@PathParam("id") String id, Map<String, Object> content) {
-		boolean exists = client.get("PROCESS", id) != null;
+		boolean exists = client.get(id) != null;
 		if (!id.equals(content.get("refId")))
 			return Response.status(422).entity("refId field did not match id in url").build();
 		String error = Util.checkValues(content);
 		if (error != null)
 			return Response.status(422).entity(error).build();
-		client.index("PROCESS", id, content);
+		client.index(id, content);
 		if (exists)
 			return Response.noContent().location(url("search/" + id)).build();
 		return Response.created(url("")).build();
@@ -70,7 +70,7 @@ public class IndexResource {
 	@DELETE
 	@Path("{id}")
 	public Response delete(@PathParam("id") String id) {
-		client.remove("PROCESS", id);
+		client.remove(id);
 		return Response.noContent().build();
 	}
 

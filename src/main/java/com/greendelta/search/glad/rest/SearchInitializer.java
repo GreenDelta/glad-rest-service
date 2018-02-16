@@ -1,67 +1,54 @@
 package com.greendelta.search.glad.rest;
 
-import java.io.IOException;
-import java.util.Collections;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.settings.Settings.Builder;
-import org.elasticsearch.node.Node;
-import org.elasticsearch.node.NodeValidationException;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 
 import com.greendelta.search.wrapper.SearchClient;
 import com.greendelta.search.wrapper.es.EsClient;
-import com.greendelta.search.wrapper.es.EsSettings;
 
 public class SearchInitializer implements ServletContextListener {
 
-	private static Node node;
 	private static SearchClient client;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		createNode();
 		createClient();
 	}
 
-	private static void createNode() {
-		String home = Util.getProperty("search.home");
+	private static void createClient() {
+		String cluster = Util.getProperty("search.cluster");
+		String host = Util.getProperty("search.host");
+		String index = Util.getProperty("search.index");
 		Builder settingsBuilder = Settings.builder()
-				.put("http.enabled", "false")
-				.put("transport.type", "local")
-				.put("path.home", home);
+				.put("cluster.name", cluster);
 		Settings settings = settingsBuilder.build();
-		node = new Node(settings);
+		TransportClient tClient = new PreBuiltTransportClient(settings);
 		try {
-			node.start();
-		} catch (NodeValidationException e) {
-			node = null;
+			tClient.addTransportAddress(new TransportAddress(InetAddress.getByName(host), 9300));
+		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+		client = new EsClient(tClient, index, "PROCESS");
+		Map<String, String> indexSettings = new HashMap<>();
+		indexSettings.put("config", Util.getResource("es-settings.json"));
+		indexSettings.put("mapping", Util.getResource("es-fields.json"));
+		client.create(indexSettings);
 	}
-
-	private static void createClient() {
-		client = new EsClient(node.client());
-		Map<String, Object> settings = new HashMap<>();
-		settings.put(EsSettings.CONFIG, Util.getResource("es-settings.json"));
-		settings.put(EsSettings.MAPPINGS, Collections.singletonMap("PROCESS", Util.getResource("es-fields.json")));
-		client.create(settings);
-	}
-
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		if (node == null)
-			return;
-		try {
-			node.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 	}
 
 	static SearchClient getClient() {

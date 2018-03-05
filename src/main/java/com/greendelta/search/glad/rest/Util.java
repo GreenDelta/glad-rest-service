@@ -78,6 +78,8 @@ class Util {
 				String message = null;
 				if (Defs.TIME_FIELDS.contains(key)) {
 					message = checkTime(key, value);
+				} else if (Defs.LONG_FIELDS.contains(key)) {
+					message = checkLong(key, value);
 				} else if (Defs.BOOLEAN_FIELDS.contains(key)) {
 					message = checkBoolean(key, value);
 				} else if (Defs.STRING_FIELDS.contains(key)) {
@@ -108,6 +110,8 @@ class Util {
 				error = "Field can not be set, but is calculated internally";
 			if (Defs.BOOLEAN_FIELDS.contains(key)) {
 				error = checkBoolean(key, data.get(key));
+			} else if (Defs.LONG_FIELDS.contains(key)) {
+				error = checkLong(key, data.get(key));
 			} else if (Defs.TIME_FIELDS.contains(key)) {
 				error = checkLong(key, data.get(key));
 			} else if (!Defs.STRING_FIELDS.contains(key)) {

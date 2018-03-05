@@ -15,9 +15,10 @@ class Defs {
 			"modellingPrinciple", "modellingApproach", "aggregationType", "licenseType", "name", "category",
 			"categories", "categoryPaths", "location", "completeness", "sampleRepresentativeness", "samplingProcedure",
 			"technology", "representativeness", "biogenicCarbon", "reviewer", "copyrightHolder", "license", "contact",
-			"description", "dataSetUrl", "format");
+			"description", "dataSetUrl", "format", "dataprovider");
 	static final List<String> CALCULATED_FIELDS = list("categoryPaths");
 	static final List<String> TIME_FIELDS = list("validFrom", "validUntil");
+	static final List<String> LONG_FIELDS = list("validFromYear", "validUntilYear");
 	static final List<String> BOOLEAN_FIELDS = list("reviewed", "copyrightProtected");
 	static final List<String> FILTER_TYPES = list("TERM");
 	static final List<String> AGGREGATION_TYPES = list("HORIZONTAL", "VERTICAL", "NONE", "UNKNOWN");

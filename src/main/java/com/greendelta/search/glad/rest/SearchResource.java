@@ -14,13 +14,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.greendelta.search.wrapper.Categories;
 import com.greendelta.search.wrapper.Conjunction;
 import com.greendelta.search.wrapper.SearchClient;
 import com.greendelta.search.wrapper.SearchFilterValue;
 import com.greendelta.search.wrapper.SearchQuery;
 import com.greendelta.search.wrapper.SearchQueryBuilder;
 import com.greendelta.search.wrapper.SearchResult;
+import com.greendelta.search.wrapper.SearchSorting;
 import com.greendelta.search.wrapper.aggregations.SearchAggregation;
+import com.greendelta.search.wrapper.aggregations.results.AggregationResult;
 
 @Path("search")
 public class SearchResource {
@@ -37,21 +40,32 @@ public class SearchResource {
 	public Response search(@Context UriInfo uriInfo) {
 		Map<String, Set<String>> parameters = Util.getQueryParameters(uriInfo);
 		String query = Util.removeStringFilter("query", parameters);
+		String sortBy = Util.removeStringFilter("sortBy", parameters);
+		String sortOrderValue = Util.removeStringFilter("sortOrder", parameters, SearchSorting.ASC.name());
+		SearchSorting sortOrder = SearchSorting.valueOf(sortOrderValue);
 		int page = Util.removeIntFilter("page", parameters, 1);
 		int pageSize = Util.removeIntFilter("pageSize", parameters, SearchQuery.DEFAULT_PAGE_SIZE);
 		String error = Util.checkParameters(parameters);
 		if (error != null) {
 			return Response.status(Status.BAD_REQUEST).entity(error).build();
 		}
-		SearchResult<Map<String, Object>> result = client.search(createQuery(query, page, pageSize, parameters));
+		SearchResult<Map<String, Object>> result = client
+				.search(createQuery(query, page, pageSize, sortBy, sortOrder, parameters));
+		for (AggregationResult aResult : result.aggregations) {
+			if (aResult.name.equals(Aggregations.CATEGORY_PATHS.name)) {
+				Categories.groupAggregation(aResult);
+			}
+		}
 		return Response.ok(result).build();
 	}
 
-	private SearchQuery createQuery(String query, int page, int pageSize, Map<String, Set<String>> filters) {
+	private SearchQuery createQuery(String query, int page, int pageSize, String sortBy, SearchSorting sortOrder,
+			Map<String, Set<String>> filters) {
 		SearchQueryBuilder builder = new SearchQueryBuilder()
 				.query(query, Defs.FULL_TEXT_FIELDS)
 				.page(page)
-				.pageSize(pageSize);
+				.pageSize(pageSize)
+				.sortBy(sortBy, sortOrder);
 		for (SearchAggregation aggregation : Aggregations.ALL) {
 			builder.aggregation(aggregation);
 		}

@@ -10,6 +10,12 @@
 			"category": {
 				"type": "text"
 			},
+			"categories": {
+				"type": "keyword"
+			},
+			"categoryPaths": {
+				"type": "keyword"
+			},
 			"dataSetUrl": {
 				"type": "text"
 			},
@@ -31,8 +37,14 @@
 			"validFrom": {
 				"type": "date"
 			},
+			"validFromYear": {
+				"type": "keyword"
+			},
 			"validUntil": {
 				"type": "date"
+			},
+			"validUntilYear": {
+				"type": "keyword"
 			},
 			"location": {
 				"type": "keyword"
@@ -59,7 +71,7 @@
 				"type": "boolean"
 			},
 			"reviewer": {
-				"type": "text"
+				"type": "keyword"
 			},
 			"aggregationType": {
 				"type": "keyword"
@@ -68,7 +80,7 @@
 				"type": "boolean"
 			},
 			"copyrightHolder": {
-				"type": "text"
+				"type": "keyword"
 			},
 			"licenseType": {
 				"type": "keyword"
@@ -77,7 +89,10 @@
 				"type": "text"
 			},
 			"contact": {
-				"type": "text"
+				"type": "keyword"
+			},
+			"dataprovider": {
+				"type": "keyword"
 			},
 			"description": {
 				"type": "text"

@@ -48,15 +48,15 @@ class Util {
 	}
 
 	static String removeStringFilter(String name, Map<String, Set<String>> filters) {
-		return removeFilter(name, filters, "");
+		return removeStringFilter(name, filters, "");
 	}
 
 	static int removeIntFilter(String name, Map<String, Set<String>> filters, int defaultValue) {
-		String value = removeFilter(name, filters, Integer.toString(defaultValue));
+		String value = removeStringFilter(name, filters, Integer.toString(defaultValue));
 		return Integer.parseInt(value);
 	}
 
-	private static String removeFilter(String name, Map<String, Set<String>> filters, String defaultValue) {
+	static String removeStringFilter(String name, Map<String, Set<String>> filters, String defaultValue) {
 		Set<String> value = filters.remove(name);
 		if (value == null)
 			return defaultValue;
@@ -104,6 +104,8 @@ class Util {
 		}
 		for (String key : data.keySet()) {
 			String error = null;
+			if (Defs.CALCULATED_FIELDS.contains(key))
+				error = "Field can not be set, but is calculated internally";
 			if (Defs.BOOLEAN_FIELDS.contains(key)) {
 				error = checkBoolean(key, data.get(key));
 			} else if (Defs.TIME_FIELDS.contains(key)) {

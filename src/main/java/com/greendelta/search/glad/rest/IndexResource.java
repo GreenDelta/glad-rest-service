@@ -2,6 +2,11 @@ package com.greendelta.search.glad.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -16,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.greendelta.search.wrapper.Categories;
 import com.greendelta.search.wrapper.SearchClient;
 
 @Path("search/index")
@@ -47,8 +53,21 @@ public class IndexResource {
 		boolean exists = client.get(id) != null;
 		if (exists)
 			return Response.status(Status.CONFLICT).location(url("search/" + id)).build();
+		Categories.fillUp(content, getCategories(content));
 		client.index(id, content);
 		return Response.created(url(id)).build();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> getCategories(Map<String, Object> content) {
+		Object value = content.get("categories");
+		if (value == null)
+			return Collections.emptyList();
+		if (value instanceof Collection)
+			return new ArrayList<>((Collection<String>) value);
+		if (value instanceof String[])
+			return Arrays.asList((String[]) value);
+		return Collections.singletonList(value.toString());
 	}
 
 	@PUT

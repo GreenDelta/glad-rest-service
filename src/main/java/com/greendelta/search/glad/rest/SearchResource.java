@@ -64,8 +64,10 @@ public class SearchResource {
 		SearchQueryBuilder builder = new SearchQueryBuilder()
 				.query(query, Defs.FULL_TEXT_FIELDS)
 				.page(page)
-				.pageSize(pageSize)
-				.sortBy(sortBy, sortOrder);
+				.pageSize(pageSize);
+		if (sortBy != null && !sortBy.isEmpty()) {
+			builder.sortBy(sortBy, sortOrder);
+		}
 		for (SearchAggregation aggregation : Aggregations.ALL) {
 			builder.aggregation(aggregation);
 		}

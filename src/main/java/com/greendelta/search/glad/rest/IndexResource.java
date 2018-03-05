@@ -80,6 +80,7 @@ public class IndexResource {
 		String error = Util.checkValues(content);
 		if (error != null)
 			return Response.status(422).entity(error).build();
+		Categories.fillUp(content, getCategories(content));
 		client.index(id, content);
 		if (exists)
 			return Response.noContent().location(url("search/" + id)).build();

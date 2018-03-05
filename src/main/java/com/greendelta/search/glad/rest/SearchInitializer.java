@@ -20,6 +20,7 @@ import com.greendelta.search.wrapper.es.EsClient;
 public class SearchInitializer implements ServletContextListener {
 
 	private static SearchClient client;
+	private static TransportClient tClient;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -33,7 +34,7 @@ public class SearchInitializer implements ServletContextListener {
 		Builder settingsBuilder = Settings.builder()
 				.put("cluster.name", cluster);
 		Settings settings = settingsBuilder.build();
-		TransportClient tClient = new PreBuiltTransportClient(settings);
+		tClient = new PreBuiltTransportClient(settings);
 		try {
 			tClient.addTransportAddress(new TransportAddress(InetAddress.getByName(host), 9300));
 		} catch (UnknownHostException e) {
@@ -48,7 +49,9 @@ public class SearchInitializer implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-
+		if (tClient == null)
+			return;
+		tClient.close();
 	}
 
 	static SearchClient getClient() {

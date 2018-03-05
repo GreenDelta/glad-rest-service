@@ -54,6 +54,7 @@ public class IndexResource {
 		if (exists)
 			return Response.status(Status.CONFLICT).location(url("search/" + id)).build();
 		Categories.fillUp(content, getCategories(content));
+		Util.fillTime(content);
 		client.index(id, content);
 		return Response.created(url(id)).build();
 	}
@@ -81,6 +82,7 @@ public class IndexResource {
 		if (error != null)
 			return Response.status(422).entity(error).build();
 		Categories.fillUp(content, getCategories(content));
+		Util.fillTime(content);
 		client.index(id, content);
 		if (exists)
 			return Response.noContent().location(url("search/" + id)).build();

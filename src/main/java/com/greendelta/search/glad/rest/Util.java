@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -216,6 +217,41 @@ class Util {
 
 	static String getProperty(String key) {
 		return PROPERTIES.getProperty(key);
+	}
+
+	static void fillTime(Map<String, Object> content) {
+		if (content.containsKey("validFrom") && !content.containsKey("validFromYear")) {
+			content.put("validFromYear", toYear(content.get("validFrom")));
+		} else if (!content.containsKey("validFrom") && content.containsKey("validFromYear")) {
+			content.put("validFrom", toDate(content.get("validFromYear")));
+		}
+		if (content.containsKey("validUntil") && !content.containsKey("validUntilYear")) {
+			content.put("validUntilYear", toYear(content.get("validUntil")));
+		} else if (!content.containsKey("validUntil") && content.containsKey("validUntilYear")) {
+			content.put("validUntil", toDate(content.get("validUntilYear")));
+		}
+	}
+
+	static Integer toYear(Object validFrom) {
+		if (validFrom == null || validFrom.toString().isEmpty())
+			return null;
+		long l = Long.parseLong(validFrom.toString());
+		if (l == 0)
+			return null;
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(l);
+		return c.get(Calendar.YEAR);
+	}
+
+	static Long toDate(Object validFrom) {
+		if (validFrom == null || validFrom.toString().isEmpty())
+			return null;
+		int l = Integer.parseInt(validFrom.toString());
+		if (l == 0)
+			return null;
+		Calendar c = Calendar.getInstance();
+		c.set(l, 0, 1, 0, 0, 0);
+		return c.getTimeInMillis();
 	}
 
 }

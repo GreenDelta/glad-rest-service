@@ -18,10 +18,12 @@ class Aggregations {
 	static final TermsAggregation FORMAT = term("format");
 	static final TermsAggregation DATAPROVIDER = term("dataprovider");
 	static final TermsAggregation CATEGORY_PATHS = term("categoryPaths");
+	static final TermsAggregation VALID_FROM= term("validFromYear");
+	static final TermsAggregation VALID_UNTIL= term("validUntilYear");
 
 	static final SearchAggregation[] ALL = {
 			PROCESS_TYPE, MODELLING_PRINCIPLE, MODELLING_APPROACH, NOMENCLATURE, AGGREGATION_TYPE, LICENSE_TYPE,
-			FORMAT, DATAPROVIDER, LOCATION, CATEGORY_PATHS
+			FORMAT, DATAPROVIDER, LOCATION, CATEGORY_PATHS, VALID_FROM, VALID_UNTIL
 	};
 
 	static final Map<String, SearchAggregation> AS_MAP;

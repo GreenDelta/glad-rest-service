@@ -2,11 +2,6 @@ package com.greendelta.search.glad.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -21,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.greendelta.search.wrapper.Categories;
+import com.greendelta.search.glad.rest.Data.InvalidInputException;
 import com.greendelta.search.wrapper.SearchClient;
 
 @Path("search/index")
@@ -46,29 +41,20 @@ public class IndexResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response post(Map<String, Object> content) {
-		String error = Util.checkValues(content);
-		if (error != null)
-			return Response.status(422).entity(error).build();
+		try {
+			Data.values(content);
+		} catch (InvalidInputException e) {
+			return Response.status(422).entity(e.getMessage()).build();
+		}
 		String id = content.get("refId").toString();
 		boolean exists = client.get(id) != null;
 		if (exists)
 			return Response.status(Status.CONFLICT).location(url("search/" + id)).build();
-		Categories.fillUp(content, getCategories(content));
-		Util.fillTime(content);
+		DataFill.categoryInfo(content);
+		DataFill.sectorInfo(content);
+		DataFill.timeInfo(content);
 		client.index(id, content);
 		return Response.created(url(id)).build();
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<String> getCategories(Map<String, Object> content) {
-		Object value = content.get("categories");
-		if (value == null)
-			return Collections.emptyList();
-		if (value instanceof Collection)
-			return new ArrayList<>((Collection<String>) value);
-		if (value instanceof String[])
-			return Arrays.asList((String[]) value);
-		return Collections.singletonList(value.toString());
 	}
 
 	@PUT
@@ -78,11 +64,14 @@ public class IndexResource {
 		boolean exists = client.get(id) != null;
 		if (!id.equals(content.get("refId")))
 			return Response.status(422).entity("refId field did not match id in url").build();
-		String error = Util.checkValues(content);
-		if (error != null)
-			return Response.status(422).entity(error).build();
-		Categories.fillUp(content, getCategories(content));
-		Util.fillTime(content);
+		try {
+			Data.values(content);
+		} catch (InvalidInputException e) {
+			return Response.status(422).entity(e.getMessage()).build();
+		}
+		DataFill.categoryInfo(content);
+		DataFill.sectorInfo(content);
+		DataFill.timeInfo(content);
 		client.index(id, content);
 		if (exists)
 			return Response.noContent().location(url("search/" + id)).build();

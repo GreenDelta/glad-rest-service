@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +15,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.logging.log4j.core.util.IOUtils;
 
-import com.greendelta.search.wrapper.aggregations.SearchAggregation;
 import com.sun.jersey.api.uri.UriComponent;
 
 class Util {
@@ -73,135 +71,6 @@ class Util {
 		return UriComponent.decode(value, UriComponent.Type.PATH_SEGMENT);
 	}
 
-	static String checkParameters(Map<String, Set<String>> parameters) {
-		for (String key : parameters.keySet()) {
-			for (String value : parameters.get(key)) {
-				String message = null;
-				if (Defs.TIME_FIELDS.contains(key)) {
-					message = checkTime(key, value);
-				} else if (Defs.LONG_FIELDS.contains(key)) {
-					message = checkLong(key, value);
-				} else if (Defs.BOOLEAN_FIELDS.contains(key)) {
-					message = checkBoolean(key, value);
-				} else if (Defs.STRING_FIELDS.contains(key)) {
-					message = checkString(key, value);
-				} else {
-					message = "Unsupported field '" + key + "'";
-				}
-				if (message == null) {
-					return message;
-				}
-			}
-		}
-		return null;
-	}
-
-	static String checkValues(Map<String, Object> data) {
-		for (SearchAggregation aggregation : Aggregations.ALL) {
-			String field = aggregation.name;
-			String val = data.get(field) != null ? data.get(field).toString() : null;
-			List<String> valid = getValidValues(field);
-			if (val == null || valid == null || valid.contains(val))
-				continue;
-			return "Value '" + val + "' is unsupported for field '" + field + "', valid values are: " + join(valid);
-		}
-		for (String key : data.keySet()) {
-			String error = null;
-			if (Defs.CALCULATED_FIELDS.contains(key))
-				error = "Field can not be set, but is calculated internally";
-			if (Defs.BOOLEAN_FIELDS.contains(key)) {
-				error = checkBoolean(key, data.get(key));
-			} else if (Defs.LONG_FIELDS.contains(key)) {
-				error = checkLong(key, data.get(key));
-			} else if (Defs.TIME_FIELDS.contains(key)) {
-				error = checkLong(key, data.get(key));
-			} else if (!Defs.STRING_FIELDS.contains(key)) {
-				error = "Unsupported field '" + key + "'";
-			}
-			if (error != null) {
-				return error;
-			}
-		}
-		for (String key : Defs.REQUIRED_FIELDS) {
-			if (data.get(key) != null && !data.get(key).toString().isEmpty())
-				continue;
-			if (!Defs.DEFAULT_VALUES.containsKey(key))
-				return "Missing value for required field '" + key + "'";
-			data.put(key, Defs.DEFAULT_VALUES.get(key));
-		}
-		return null;
-	}
-
-	private static String checkBoolean(String key, Object v) {
-		if (v == null || v instanceof Boolean)
-			return null;
-		String value = v.toString().toLowerCase();
-		if (!value.equals("true") && !value.equals("false"))
-			return "Value '" + value + "' for field '" + key + "' is not a boolean value";
-		return null;
-	}
-
-	private static String checkTime(String key, Object v) {
-		String value = v.toString();
-		if (!value.contains(",")) {
-			if (value.startsWith("<") || value.startsWith(">")) {
-				value = value.substring(1);
-			}
-			return checkLong(key, value);
-		}
-		int index = value.indexOf(',');
-		String message = checkLong(key, value.substring(0, index));
-		if (message != null)
-			return message;
-		return checkLong(key, value.substring(index + 1));
-	}
-
-	private static String checkLong(String key, Object v) {
-		if (v == null || v instanceof Long || v instanceof Integer)
-			return null;
-		try {
-			Long.parseLong(v.toString());
-		} catch (NumberFormatException e) {
-			return "Value '" + v.toString() + "' for field '" + key + "' is not a long value";
-		}
-		return null;
-	}
-
-	private static String checkString(String key, Object v) {
-		String value = v.toString();
-		List<String> valid = getValidValues(key);
-		if (valid == null || valid.contains(value))
-			return null;
-		return "Value '" + value + "' is unsupported for field '" + key + "', valid values are: " + join(valid);
-	}
-
-	private static String join(List<String> values) {
-		String s = "[";
-		for (int i = 0; i < values.size(); i++) {
-			if (i != 0) {
-				s += ", ";
-			}
-			s += values.get(i);
-		}
-		return s + "]";
-	}
-
-	private static List<String> getValidValues(String filter) {
-		if (Aggregations.PROCESS_TYPE.name.equals(filter))
-			return Defs.PROCESS_TYPES;
-		if (Aggregations.AGGREGATION_TYPE.name.equals(filter))
-			return Defs.AGGREGATION_TYPES;
-		if (Aggregations.LICENSE_TYPE.name.equals(filter))
-			return Defs.LICENSE_TYPES;
-		if (Aggregations.MODELLING_PRINCIPLE.name.equals(filter))
-			return Defs.MODELLING_PRINCIPLES;
-		if (Aggregations.MODELLING_APPROACH.name.equals(filter))
-			return Defs.MODELLING_APPROACHES;
-		if (Aggregations.FORMAT.name.equals(filter))
-			return Defs.FORMATS;
-		return null;
-	}
-
 	static String getResource(String name) {
 		InputStream stream = Util.class.getResourceAsStream(name);
 		if (stream == null)
@@ -217,41 +86,6 @@ class Util {
 
 	static String getProperty(String key) {
 		return PROPERTIES.getProperty(key);
-	}
-
-	static void fillTime(Map<String, Object> content) {
-		if (content.containsKey("validFrom") && !content.containsKey("validFromYear")) {
-			content.put("validFromYear", toYear(content.get("validFrom")));
-		} else if (!content.containsKey("validFrom") && content.containsKey("validFromYear")) {
-			content.put("validFrom", toDate(content.get("validFromYear")));
-		}
-		if (content.containsKey("validUntil") && !content.containsKey("validUntilYear")) {
-			content.put("validUntilYear", toYear(content.get("validUntil")));
-		} else if (!content.containsKey("validUntil") && content.containsKey("validUntilYear")) {
-			content.put("validUntil", toDate(content.get("validUntilYear")));
-		}
-	}
-
-	static Integer toYear(Object validFrom) {
-		if (validFrom == null || validFrom.toString().isEmpty())
-			return null;
-		long l = Long.parseLong(validFrom.toString());
-		if (l == 0)
-			return null;
-		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(l);
-		return c.get(Calendar.YEAR);
-	}
-
-	static Long toDate(Object validFrom) {
-		if (validFrom == null || validFrom.toString().isEmpty())
-			return null;
-		int l = Integer.parseInt(validFrom.toString());
-		if (l == 0)
-			return null;
-		Calendar c = Calendar.getInstance();
-		c.set(l, 0, 1, 0, 0, 0);
-		return c.getTimeInMillis();
 	}
 
 }

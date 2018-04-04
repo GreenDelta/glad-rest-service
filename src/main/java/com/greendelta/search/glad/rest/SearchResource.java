@@ -1,6 +1,10 @@
 package com.greendelta.search.glad.rest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +18,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import com.greendelta.search.wrapper.Categories;
+import com.greendelta.search.glad.rest.Data.InvalidInputException;
+import com.greendelta.search.glad.rest.model.IndexType;
 import com.greendelta.search.wrapper.Conjunction;
 import com.greendelta.search.wrapper.SearchClient;
 import com.greendelta.search.wrapper.SearchFilterValue;
@@ -45,58 +50,95 @@ public class SearchResource {
 		SearchSorting sortOrder = SearchSorting.valueOf(sortOrderValue);
 		int page = Util.removeIntFilter("page", parameters, 1);
 		int pageSize = Util.removeIntFilter("pageSize", parameters, SearchQuery.DEFAULT_PAGE_SIZE);
-		String error = Util.checkParameters(parameters);
-		if (error != null) {
-			return Response.status(Status.BAD_REQUEST).entity(error).build();
-		}
-		SearchResult<Map<String, Object>> result = client
-				.search(createQuery(query, page, pageSize, sortBy, sortOrder, parameters));
-		for (AggregationResult aResult : result.aggregations) {
-			if (aResult.name.equals(Aggregations.CATEGORY_PATHS.name)) {
-				Categories.groupAggregation(aResult);
+		Set<String> queryFields = parameters.remove("queryFields");
+		Set<String> aggregations = parameters.remove("aggregate");
+		try {
+			Data.parameters(parameters);
+			SearchResult<Map<String, Object>> result = client
+					.search(createQuery(query, page, pageSize, sortBy, sortOrder, parameters, queryFields, aggregations));
+			for (AggregationResult aResult : result.aggregations) {
+				if (aResult.name.equals("categoryPaths")) {
+					aResult.group("/");
+				} else if (aResult.name.equals("sectorPaths")) {
+					aResult.group("", this::splitSectors);
+				}
 			}
+			return Response.ok(result).build();
+		} catch (InvalidInputException e) {
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
 		}
-		return Response.ok(result).build();
+	}
+
+	private String[] splitSectors(String value) {
+		String[] split = new String[value.length() / 2];
+		for (int i = 0; i < split.length; i++) {
+			split[i] = value.substring(i * 2, i * 2 + 2);
+		}
+		return split;
 	}
 
 	private SearchQuery createQuery(String query, int page, int pageSize, String sortBy, SearchSorting sortOrder,
-			Map<String, Set<String>> filters) {
+			Map<String, Set<String>> filters, Set<String> queryFields, Set<String> aggregations)
+			throws InvalidInputException {
 		SearchQueryBuilder builder = new SearchQueryBuilder()
-				.query(query, Defs.FULL_TEXT_FIELDS)
+				.query(query, getQueryFields(queryFields))
 				.page(page)
 				.pageSize(pageSize);
 		if (sortBy != null && !sortBy.isEmpty()) {
 			builder.sortBy(sortBy, sortOrder);
 		}
-		for (SearchAggregation aggregation : Aggregations.ALL) {
+		for (SearchAggregation aggregation : getAggregations(aggregations)) {
 			builder.aggregation(aggregation);
 		}
 		for (String filter : filters.keySet()) {
-			SearchAggregation aggregation = Aggregations.AS_MAP.get(filter);
+			SearchAggregation aggregation = Data.AGGREGATIONS.get(filter);
 			for (String value : filters.get(filter)) {
-				boolean isLongField = Defs.TIME_FIELDS.contains(filter);
-				if (aggregation != null) {
+				IndexType type = Data.TYPES.get(filter);
+				if (type.isNumeric() && value.startsWith(">")) {
+					builder.filter(filter, SearchFilterValue.from(type.parse(value.substring(1))));
+				} else if (type.isNumeric() && value.startsWith("<")) {
+					builder.filter(filter, SearchFilterValue.to(type.parse(value.substring(1))));
+				} else if (type.isNumeric() && value.contains(",")) {
+					builder.filter(filter, getRangeValueSet(type, value), Conjunction.AND);
+				} else if (aggregation != null) {
 					builder.aggregation(aggregation, value);
-				} else if (!isLongField) {
+				} else if (type == IndexType.TEXT) {
 					builder.filter(filter, SearchFilterValue.wildcard(value));
-				} else if (value.startsWith(">")) {
-					builder.filter(filter, SearchFilterValue.from(Long.parseLong(value.substring(1))));
-				} else if (value.startsWith("<")) {
-					builder.filter(filter, SearchFilterValue.to(Long.parseLong(value.substring(1))));
-				} else if (value.contains(",")) {
-					builder.filter(filter, getRangeValueSet(value), Conjunction.AND);
 				} else {
-					builder.filter(filter, SearchFilterValue.term(Long.parseLong(value)));
+					builder.filter(filter, SearchFilterValue.term(type.parse(value)));
 				}
 			}
 		}
 		return builder.build();
 	}
 
-	private Set<SearchFilterValue> getRangeValueSet(String value) {
+	private Collection<SearchAggregation> getAggregations(Set<String> names) throws InvalidInputException {
+		if (names == null)
+			return Data.AGGREGATIONS.values();
+		List<SearchAggregation> aggregations = new ArrayList<>();
+		for (String name : names) {
+			SearchAggregation aggregation = Data.AGGREGATIONS.get(name);
+			if (aggregation == null)
+				throw new InvalidInputException("No aggregation available for field '" + name + "'");
+			aggregations.add(aggregation);
+		}
+		return aggregations;
+	}
+
+	private String[] getQueryFields(Set<String> names) throws InvalidInputException {
+		if (names == null || names.isEmpty())
+			return Data.FULL_TEXT_FIELDS;
+		List<String> all = Arrays.asList(Data.FULL_TEXT_FIELDS);
+		for (String name : names)
+			if (!all.contains(name))
+				throw new InvalidInputException("Field '" + name + "' is not a query field");
+		return names.toArray(new String[names.size()]);
+	}
+
+	private Set<SearchFilterValue> getRangeValueSet(IndexType type, String value) {
 		int splitIndex = value.indexOf(',');
-		Long from = Long.parseLong(value.substring(0, splitIndex));
-		Long to = Long.parseLong(value.substring(splitIndex + 1));
+		Object from = type.parse(value.substring(0, splitIndex));
+		Object to = type.parse(value.substring(splitIndex + 1));
 		Set<SearchFilterValue> values = new HashSet<>();
 		values.add(SearchFilterValue.from(from));
 		values.add(SearchFilterValue.to(to));

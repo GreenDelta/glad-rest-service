@@ -135,7 +135,7 @@
 			},
 			"publiclyAccessible": {
 				"type": "boolean"
-			},
+			}
 		}
 	}
 }

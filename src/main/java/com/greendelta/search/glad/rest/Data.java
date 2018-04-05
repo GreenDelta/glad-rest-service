@@ -61,7 +61,7 @@ class Data {
 		FULL_TEXT_FIELDS = fullText.toArray(new String[fullText.size()]);
 	}
 
-	static void parameters(Map<String, Set<String>> parameters) throws InvalidInputException {
+	static void validateParameters(Map<String, Set<String>> parameters) throws InvalidInputException {
 		for (String field : parameters.keySet()) {
 			for (String value : parameters.get(field)) {
 				Data.checkValue(field, value);
@@ -69,7 +69,7 @@ class Data {
 		}
 	}
 
-	static void values(Map<String, Object> data) throws InvalidInputException {
+	static void validateValues(Map<String, Object> data) throws InvalidInputException {
 		for (String field : data.keySet()) {
 			if (field.equals("categoryPaths") || field.equals("sectorPaths") || field.equals("category"))
 				throw new InvalidInputException("Field can not be set, but is calculated internally");

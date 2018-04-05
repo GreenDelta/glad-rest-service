@@ -53,7 +53,7 @@ public class SearchResource {
 		Set<String> queryFields = parameters.remove("queryFields");
 		Set<String> aggregations = parameters.remove("aggregate");
 		try {
-			Data.parameters(parameters);
+			Data.validateParameters(parameters);
 			SearchResult<Map<String, Object>> result = client
 					.search(createQuery(query, page, pageSize, sortBy, sortOrder, parameters, queryFields, aggregations));
 			for (AggregationResult aResult : result.aggregations) {

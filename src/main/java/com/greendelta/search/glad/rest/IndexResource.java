@@ -42,7 +42,7 @@ public class IndexResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response post(Map<String, Object> content) {
 		try {
-			Data.values(content);
+			Data.validateValues(content);
 		} catch (InvalidInputException e) {
 			return Response.status(422).entity(e.getMessage()).build();
 		}
@@ -65,7 +65,7 @@ public class IndexResource {
 		if (!id.equals(content.get("refId")))
 			return Response.status(422).entity("refId field did not match id in url").build();
 		try {
-			Data.values(content);
+			Data.validateValues(content);
 		} catch (InvalidInputException e) {
 			return Response.status(422).entity(e.getMessage()).build();
 		}

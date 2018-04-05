@@ -1,102 +1,141 @@
 {
 	"PROCESS": {
 		"properties": {
-			"refId": {
-				"type": "keyword"
-			},
 			"name": {
 				"type": "text"
 			},
 			"category": {
 				"type": "text"
 			},
-			"categories": {
-				"type": "keyword"
+			"description": {
+				"type": "text"
 			},
-			"categoryPaths": {
+			"technology": {
+				"type": "text"
+			},
+			"refId": {
 				"type": "keyword"
 			},
 			"dataSetUrl": {
-				"type": "text"
-			},
-			"processType": {
 				"type": "keyword"
 			},
 			"format": {
 				"type": "keyword"
 			},
-			"completeness": {
-				"type": "text"
-			},
-			"sampleRepresentativeness": {
-				"type": "text"
-			},
-			"samplingProcedure": {
-				"type": "text"
-			},
-			"validFrom": {
-				"type": "date"
-			},
-			"validFromYear": {
-				"type": "keyword"
-			},
-			"validUntil": {
-				"type": "date"
-			},
-			"validUntilYear": {
-				"type": "keyword"
-			},
 			"location": {
-				"type": "keyword"
-			},
-			"technology": {
-				"type": "text"
-			},
-			"supportedNomenclatures": {
-				"type": "keyword"
-			},
-			"representativeness": {
-				"type": "text"
-			},
-			"modellingPrinciple": {
-				"type": "keyword"
-			},
-			"modellingApproach": {
-				"type": "keyword"
-			},
-			"biogenicCarbon": {
-				"type": "text"
-			},
-			"reviewed": {
-				"type": "boolean"
-			},
-			"reviewer": {
-				"type": "keyword"
-			},
-			"aggregationType": {
-				"type": "keyword"
-			},
-			"copyrightProtected": {
-				"type": "boolean"
-			},
-			"copyrightHolder": {
-				"type": "keyword"
-			},
-			"licenseType": {
-				"type": "keyword"
-			},
-			"license": {
-				"type": "text"
-			},
-			"contact": {
 				"type": "keyword"
 			},
 			"dataprovider": {
 				"type": "keyword"
 			},
-			"description": {
-				"type": "text"
-			}
+			"categoryPaths": {
+				"type": "keyword"
+			},
+			"supportedNomenclatures": {
+				"type": "keyword"
+			},
+			"lciaMethods": {
+				"type": "keyword"
+			},
+			"sectorPaths": {
+				"type": "keyword"
+			},
+			"processType": {
+				"type": "keyword"
+			},
+			"representativenessType": {
+				"type": "keyword"
+			},
+			"modelingType": {
+				"type": "keyword"
+			},
+			"multifunctionalModeling": {
+				"type": "keyword"
+			},
+			"biogenicCarbonModeling": {
+				"type": "keyword"
+			},
+			"endOfLifeModeling": {
+				"type": "keyword"
+			},
+			"waterModeling": {
+				"type": "keyword"
+			},
+			"infrastructureModeling": {
+				"type": "keyword"
+			},
+			"emissionModeling": {
+				"type": "keyword"
+			},
+			"carbonStorageModeling": {
+				"type": "keyword"
+			},
+			"sourceReliability": {
+				"type": "keyword"
+			},
+			"aggregationType": {
+				"type": "keyword"
+			},
+			"reviewType": {
+				"type": "keyword"
+			},
+			"reviewSystem": {
+				"type": "keyword"
+			},
+			"sector": {
+				"type": "keyword"
+			},
+			"copyrightHolder": {
+				"type": "keyword"
+			},
+			"license": {
+				"type": "keyword"
+			},
+			"contact": {
+				"type": "keyword"
+			},
+			"categories": {
+				"type": "keyword"
+			},
+			"reviewers": {
+				"type": "keyword"
+			},
+			"validFrom": {
+				"type": "date"
+			},
+			"validUntil": {
+				"type": "date"
+			},
+			"validFromYear": {
+				"type": "integer"
+			},
+			"validUntilYear": {
+				"type": "integer"
+			},
+			"latitude": {
+				"type": "double"
+			},
+			"longitude": {
+				"type": "double"
+			},
+			"completeness": {
+				"type": "double"
+			},
+			"amountBalance": {
+				"type": "double"
+			},
+			"representativenessValue": {
+				"type": "double"
+			},
+			"copyrightProtected": {
+				"type": "boolean"
+			},
+			"free": {
+				"type": "boolean"
+			},
+			"publiclyAccessible": {
+				"type": "boolean"
+			},
 		}
 	}
 }

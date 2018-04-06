@@ -51,7 +51,9 @@ public class Index {
 	@IndexField(type = KEYWORD, aggregatable = true)
 	public String[] lciaMethods;
 	@IndexField(type = KEYWORD, aggregatable = true)
-	public String[] sectorPaths;
+	public String[] unspscPaths;
+	@IndexField(type = KEYWORD, aggregatable = true)
+	public String[] co2pePaths;
 	@IndexField(type = KEYWORD, aggregatable = true, defaultValue = "UNKNOWN")
 	public ProcessType processType;
 	@IndexField(type = KEYWORD, aggregatable = true, defaultValue = "EXPERT_BASED")
@@ -81,7 +83,9 @@ public class Index {
 	@IndexField(type = KEYWORD, aggregatable = true, defaultValue = "NOT_APPLICABLE")
 	public ReviewSystem reviewSystem;
 	@IndexField(type = KEYWORD)
-	public String sector;
+	public String unspscCode;
+	@IndexField(type = KEYWORD)
+	public String co2peCode;
 	@IndexField(type = KEYWORD)
 	public String copyrightHolder;
 	@IndexField(type = KEYWORD)
@@ -107,11 +111,11 @@ public class Index {
 	public Double latitude;
 	@IndexField(type = DOUBLE)
 	public Double longitude;
-	@IndexField(type = DOUBLE)
+	@IndexField(type = DOUBLE, defaultValue = "100.0")
 	public Double completeness;
-	@IndexField(type = DOUBLE)
-	public Double amountBalance;
-	@IndexField(type = DOUBLE)
+	@IndexField(type = DOUBLE, defaultValue = "0.0")
+	public Double amountDeviation;
+	@IndexField(type = DOUBLE, defaultValue = "1.7976931348623157E308")
 	public Double representativenessValue;
 
 	@IndexField(type = BOOLEAN, aggregatable = true)

@@ -51,7 +51,8 @@ public class IndexResource {
 		if (exists)
 			return Response.status(Status.CONFLICT).location(url("search/" + id)).build();
 		DataFill.categoryInfo(content);
-		DataFill.sectorInfo(content);
+		DataFill.unspscCodeInfo(content);
+		DataFill.co2peCodeInfo(content);
 		DataFill.timeInfo(content);
 		client.index(id, content);
 		return Response.created(url(id)).build();
@@ -70,7 +71,8 @@ public class IndexResource {
 			return Response.status(422).entity(e.getMessage()).build();
 		}
 		DataFill.categoryInfo(content);
-		DataFill.sectorInfo(content);
+		DataFill.unspscCodeInfo(content);
+		DataFill.co2peCodeInfo(content);
 		DataFill.timeInfo(content);
 		client.index(id, content);
 		if (exists)

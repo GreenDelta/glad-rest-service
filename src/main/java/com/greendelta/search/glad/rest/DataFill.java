@@ -23,20 +23,38 @@ class DataFill {
 		}
 	}
 
-	static void sectorInfo(Map<String, Object> map) {
-		String sector = map.get("sector") != null ? map.get("sector").toString() : null;
-		if (sector == null || sector.isEmpty())
+	static void unspscCodeInfo(Map<String, Object> map) {
+		String code = map.get("unspscCode") != null ? map.get("unspscCode").toString() : null;
+		if (code == null || code.isEmpty())
 			return;
-		while (sector.length() < 8)
-			sector = sector + "0";
-		if (sector.length() > 8)
-			sector = sector.substring(0, 8);
-		List<String> sectorPaths = new ArrayList<>();
+		while (code.length() < 8)
+			code = code + "0";
+		if (code.length() > 8)
+			code = code.substring(0, 8);
+		List<String> paths = new ArrayList<>();
 		for (int i = 0; i < 4; i++) {
-			sectorPaths.add(sector.substring(0, i * 2 + 2));
+			paths.add(code.substring(0, i * 2 + 2));
 		}
-		map.put("sector", sector);
-		map.put("sectorPaths", sectorPaths);
+		map.put("unspscCode", code);
+		map.put("unspscPaths", paths);
+	}
+
+	static void co2peCodeInfo(Map<String, Object> map) {
+		String code = map.get("co2peCode") != null ? map.get("co2peCode").toString() : null;
+		if (code == null || code.isEmpty())
+			return;
+		while (code.split(".").length < 3)
+			code = code + ".0";
+		List<String> paths = new ArrayList<>();
+		String current = "";
+		for (String part : code.split(".")) {
+			if (!current.isEmpty())
+				current += ".";
+			current += part;
+			paths.add(current);
+		}
+		map.put("co2peCode", code);
+		map.put("co2pePaths", paths);
 	}
 
 	static void categoryInfo(Map<String, Object> map) {

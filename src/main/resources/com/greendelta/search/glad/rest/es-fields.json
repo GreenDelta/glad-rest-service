@@ -37,7 +37,10 @@
 			"lciaMethods": {
 				"type": "keyword"
 			},
-			"sectorPaths": {
+			"unspscPaths": {
+				"type": "keyword"
+			},
+			"co2pePaths": {
 				"type": "keyword"
 			},
 			"processType": {
@@ -82,7 +85,10 @@
 			"reviewSystem": {
 				"type": "keyword"
 			},
-			"sector": {
+			"unspscCode": {
+				"type": "keyword"
+			},
+			"co2peCode": {
 				"type": "keyword"
 			},
 			"copyrightHolder": {
@@ -101,10 +107,10 @@
 				"type": "keyword"
 			},
 			"validFrom": {
-				"type": "date"
+				"type": "long"
 			},
 			"validUntil": {
-				"type": "date"
+				"type": "long"
 			},
 			"validFromYear": {
 				"type": "integer"
@@ -121,7 +127,7 @@
 			"completeness": {
 				"type": "double"
 			},
-			"amountBalance": {
+			"amountDeviation": {
 				"type": "double"
 			},
 			"representativenessValue": {

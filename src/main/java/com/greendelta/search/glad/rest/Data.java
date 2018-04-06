@@ -77,10 +77,8 @@ class Data {
 			Data.checkValue(field, value);
 			if (value != null)
 				continue;
-			if (Data.REQUIRED.get(field) == false)
-				continue;
 			String defaultValue = Data.DEFAULTS.get(field);
-			if (defaultValue == null)
+			if (defaultValue == null && Data.REQUIRED.get(field))
 				throw new InvalidInputException("Missing value for required field '" + field + "'");
 			data.put(field, defaultValue);
 		}

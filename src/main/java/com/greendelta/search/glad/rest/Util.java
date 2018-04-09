@@ -55,6 +55,13 @@ class Util {
 		return Integer.parseInt(value);
 	}
 
+	static Long removeLongFilter(String name, Map<String, Set<String>> filters) {
+		String value = removeStringFilter(name, filters);
+		if (value == null || value.isEmpty())
+			return null;
+		return Long.parseLong(value);
+	}
+
 	static String removeStringFilter(String name, Map<String, Set<String>> filters, String defaultValue) {
 		Set<String> value = filters.remove(name);
 		if (value == null)

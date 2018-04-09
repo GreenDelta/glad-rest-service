@@ -102,14 +102,14 @@ public class Index {
 	@IndexField(type = DATE)
 	public Long validUntil;
 
-	@IndexField(type = INTEGER, aggregatable = true)
+	@IndexField(type = INTEGER, aggregatable = true, defaultValue = "-9223372036854775808")
 	public Integer validFromYear;
-	@IndexField(type = INTEGER, aggregatable = true)
+	@IndexField(type = INTEGER, aggregatable = true, defaultValue = "-9223372036854775808")
 	public Integer validUntilYear;
 
-	@IndexField(type = DOUBLE)
+	@IndexField(type = DOUBLE, defaultValue = "-91")
 	public Double latitude;
-	@IndexField(type = DOUBLE)
+	@IndexField(type = DOUBLE, defaultValue = "-181")
 	public Double longitude;
 	@IndexField(type = DOUBLE, defaultValue = "100.0")
 	public Double completeness;

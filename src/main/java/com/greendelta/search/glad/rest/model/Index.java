@@ -45,11 +45,11 @@ public class Index {
 	@IndexField(type = KEYWORD, aggregatable = true)
 	public String dataprovider;
 	@IndexField(type = KEYWORD, aggregatable = true)
-	public String[] categoryPaths;
-	@IndexField(type = KEYWORD, aggregatable = true)
 	public String[] supportedNomenclatures;
 	@IndexField(type = KEYWORD, aggregatable = true)
 	public String[] lciaMethods;
+	@IndexField(type = KEYWORD, aggregatable = true)
+	public String[] categoryPaths;
 	@IndexField(type = KEYWORD, aggregatable = true)
 	public String[] unspscPaths;
 	@IndexField(type = KEYWORD, aggregatable = true)
@@ -97,14 +97,14 @@ public class Index {
 	@IndexField(type = KEYWORD)
 	public String[] reviewers;
 
-	@IndexField(type = DATE)
+	@IndexField(type = DATE, defaultValue = "-9223372036854775808")
 	public Long validFrom;
-	@IndexField(type = DATE)
+	@IndexField(type = DATE, defaultValue = "-9223372036854775808")
 	public Long validUntil;
 
-	@IndexField(type = INTEGER, aggregatable = true, defaultValue = "-9223372036854775808")
+	@IndexField(type = INTEGER, aggregatable = true)
 	public Integer validFromYear;
-	@IndexField(type = INTEGER, aggregatable = true, defaultValue = "-9223372036854775808")
+	@IndexField(type = INTEGER, aggregatable = true)
 	public Integer validUntilYear;
 
 	@IndexField(type = DOUBLE, defaultValue = "-91")

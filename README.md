@@ -27,7 +27,7 @@ git clone https://github.com/GreenDelta/glad-rest-service.git
 ```
 
 #### Build
-Now you can build the glad-rest-service application with `mvn install`, which will create a war-file glad-rest-service-1.0.0.war
+Now you can build the glad-rest-service application with `mvn package`, which will create a war-file glad-rest-service-1.0.0.war
 
 #### Configuration
 The build war file contains a file /WEB-INF/classes/com/greendelta/search/glad/rest/app.properties.

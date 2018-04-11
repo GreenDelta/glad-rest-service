@@ -1,6 +1,8 @@
 # GLAD rest service
 This project provides a web-service for indexing and searching LCA meta data, as defined in the [GLAD project](https://www.lifecycleinitiative.org/resources-2/global-lca-data-network-glad/).
 
+A detailed documentation of the REST service is found [here](https://github.com/GreenDelta/glad-rest-service/blob/master/index.html).
+
 ## Build from source
 
 #### Dependent modules

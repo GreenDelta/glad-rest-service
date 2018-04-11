@@ -1,0 +1,610 @@
+swagger: "2.0"
+info:
+  title: LCA Search REST Service
+  description: A RESTful Webservice for LCA data indexing and searching GLAD data descriptors
+  version: "1.0.0"
+host: example.greendelta.com
+schemes: [https]
+basePath: /
+produces: [application/json]
+definitions:
+  FilterType:
+    type: string
+    enum: [TERM]
+    default: TERM
+  ProcessType:
+    type: string
+    enum: [UNIT, PARTIALLY_AGGREGATED, FULLY_AGGREGATED, BRIDGE, UNKNOWN]  
+    default: UNKNOWN
+  RepresentativenessType:
+    type: string
+    enum: [SCIENTIFIC, EXPERT_BASED]
+    default: EXPERT_BASED
+  ModelingType:
+    type: string
+    enum: [ATTRIBUTIONAL, CONSEQUENTIAL, UNKNOWN]    
+    default: UNKNOWN
+  MultifunctionalModeling:
+    type: string
+    enum: [PHYSICAL, ECONOMIC, CAUSAL, SYSTEM_EXPANSION, NONE, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  BiogenicCarbonModeling:
+    type: string
+    enum: [OMITTED, DISTINGUISHED, AGGREGATED, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  EndOfLifeModeling:
+    type: string
+    enum: [CUT_OFF, PHYSICAL_APOS, ECONOMIC_APOS, SUBSTITUTION, OTHER, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  WaterModeling:
+    type: string
+    enum: [AMOUNTS, AMOUNTS_AND_AVAILABILITY, AMOUNTS_AND_QUALITY, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  InfrastructureModeling:
+    type: string
+    enum: [INCLUDED_AND_DISTINGUISHED, INCLUDED_AND_NOT_VISIBLE, NOT_INCLUDED, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  EmissionModeling:
+    type: string
+    enum: [INCLUDED_AND_DISTINGUISHED, INCLUDED_AND_NOT_VISIBLE, NOT_INCLUDED, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  CarbonStorageModeling:
+    type: string
+    enum: [INCLUDED_AND_DISTINGUISHED_CORRECTION, INCLUDED_AND_DISTINGUISHED_OTHER, INCLUDED_AND_NOT_VISIBLE, NOT_INCLUDED, UNKNOWN, NOT_APPLICABLE]
+    default: NOT_APPLICABLE
+  SourceReliability:
+    type: string
+    enum: [MEASURED_VERIFIED, PARTLY_MEASURED_VERIFIED, PARTLY_MEASURED_PARTLY_ESTIMATED, ESTIMATED_QUALIFIED, ESTIMATED_UNQUALIFIED]
+    default: ESTIMATED_UNQUALIFIED
+  AggregationType:
+    type: string
+    enum: [HORIZONTAL, VERTICAL, COMBINED, UNKNOWN, NOT_APPLICABLE]    
+    default: NOT_APPLICABLE
+  ReviewType:
+    type: string
+    enum: [INTERNAL, EXTERNAL, PANEL, UNKNOWN, NONE]    
+    default: NONE
+  ReviewSystem:
+    type: string
+    enum: [ILCD, PEF, GHG, LCA_UN, OTHER, UNKNOWN, NOT_APPLICABLE]    
+    default: NOT_APPLICABLE
+  Format:
+    type: string
+    enum: [ECOSPOLD1, ECOSPOLD2, ILCD, JSON-LD, OTHER, UNKNOWN]  
+  Result:
+    type: object
+    properties:
+      data: 
+        type: array
+        items: 
+          $ref: "#/definitions/DataSet"
+      aggregations:
+        type: array
+        items: 
+          $ref: "#/definitions/AggregationResult"
+      resultInfo: 
+        $ref: "#/definitions/ResultInfo"
+  DataSet: 
+    type: object
+    properties:
+      refId:
+        type: string
+        description: The unique identifier of the data set *required
+      name:
+        type: string
+        description: The name of the data set *required
+      category:
+        type: string
+        description: The category of the data set. The value will be automatically build from the elements in the 'categories' field, concatinated with a slash (/). e.g. categories = ['Emission to air', 'Unspecified'] => category = 'Emission to air/Unspecified'
+      description:
+        type: string
+        description: The description of the data set
+      technology:
+        type: string
+        description: A description of the technology used in the data set
+      dataSetUrl:
+        type: string
+        description: A url to download the complete data set *required
+      format:
+        $ref: "#/definitions/Format"
+      location:
+        type: string
+        description: The location of the data set
+      dataprovider:
+        type: string
+        description: The name of the provider of the data set
+      supportedNomenclatures:
+        type: string
+        description: The nomenclatures, the data set is compliant to
+      lciaMethods:
+        type: array
+        description: A list of supported LCIA methods
+        items:
+          type: string
+      categoryPaths:
+        type: array
+        description: (Internally) used to build a tree like category structure. This value will be automatically calculated from the elements in the 'categories' field. e.g. categories = ['Emission to air', 'Unspecified'] => categoryPaths = ['Emission to air', 'Emission to air/Unspecified']
+        items:
+          type: string
+      unspscPaths:
+        type: array
+        description: (Internally) used to build a tree like structure for the unspsc code. This value will be automatically calculated from the 'unspscCode' field. e.g. unspscCode = '50454302' => unspscPaths = ['50', '5045', '504543', '50454302']
+        items:
+          type: string
+      co2pePaths:
+        type: array
+        description: (Internally) used to build a tree like structure for the co2pe code. This value will be automatically calculated from the 'co2peCode' field. e.g. co2peCode = '1.1.1' => co2pePaths = ['1', '1.1', '1.1.1']
+        items:
+          type: string
+      processType:
+        $ref: "#/definitions/ProcessType"
+      representativenessType:
+        $ref: "#/definitions/RepresentativenessType"
+      modelingType:
+        $ref: "#/definitions/ModelingType"
+      multifunctionalModeling:
+        $ref: "#/definitions/MultifunctionalModeling"
+      biogenicCarbonModeling:
+        $ref: "#/definitions/BiogenicCarbonModeling"
+      endOfLifeModeling:
+        $ref: "#/definitions/EndOfLifeModeling"
+      waterModeling:
+        $ref: "#/definitions/WaterModeling"
+      infrastructureModeling:
+        $ref: "#/definitions/InfrastructureModeling"
+      emissionModeling:
+        $ref: "#/definitions/EmissionModeling"
+      carbonStorageModeling:
+        $ref: "#/definitions/CarbonStorageModeling"
+      sourceReliability:
+        $ref: "#/definitions/SourceReliability"
+      aggregationType:
+        $ref: "#/definitions/AggregationType"
+      reviewType:
+        $ref: "#/definitions/ReviewType"
+      reviewSystem:
+        $ref: "#/definitions/ReviewSystem"
+      unspscCode:
+        type: string
+        description: A UNSPSC process code categorizing the data set
+      co2peCode:
+        type: string
+        description: A CO2PE product code identifying the product of the data set
+      copyrightHolder:
+        type: string
+        description: The owner of the copyright of the data set if applicable
+      license:
+        type: string
+        description: The license the data set is released under
+      contact:
+        type: string
+        description: A contact person for infomation on the data set
+      categories:
+        type: array
+        description: The categories of the data set as an array (one entry per child category)
+        items: 
+          type: string
+      reviewers:
+        type: array
+        description: A list of the names of the reviewers of the data set
+        items: 
+          type: string
+      validFrom:
+        type: integer
+        format: int64
+        description: The start of the validity of the data set in milliseconds since 01/01/1970 (unix-time tims 1000)
+      validUntil:
+        type: integer
+        format: int64
+        description: The end of the validity of the data set in milliseconds  since 01/01/1970 (unix-time tims 1000)
+      validFromYear:
+        type: integer
+        format: int32
+        description: The year of the start of the validity of the data set, will be taken from validFrom if not set
+      validUntilYear:
+        type: integer
+        format: int32
+        description: The year of the end of the validity of the data set, will be taken from validUntil if not set
+      latitude:
+        type: number
+        format: double
+        description: The latitude of the geography of the data set      
+      longitude:
+        type: number
+        format: double
+        description: The longitude of the geography of the data set            
+      completeness:
+        type: number
+        format: double
+        description: The percentage of flows according to nomenclature, defaults to 100.0
+      amountDeviation:
+        type: number
+        format: double
+        description: The deviation in mass and energy balance, defaults to 0.0
+      representativenessValue:
+        type: number
+        format: double
+        description: The percentage of variation coefficient, s/(arithm mean)
+      copyrightProtected:
+        type: boolean
+        description: Indicates if the data set is copyright protected, defaults to false
+      free:
+        type: boolean
+        description: Indicates if the data set is available for free, defaults to false
+      publiclyAccessible:
+        type: boolean
+        description: Indicates if the data set can be downloaded from the given dataSetUrl without further login, defaults to false
+  ResultInfo:
+    type: object
+    properties:
+      currentPage:
+        type: integer
+        format: int64
+        description: The result page
+      pageSize:
+        type: integer
+        format: int64
+        description: The size of the current page
+      pageCount:
+        type: integer
+        format: int64
+        description: The total page count
+      count:
+        type: integer
+        format: int64
+        description: The number of results on the current page
+      totalCount:
+        type: integer
+        format: int64
+        description: The number of total results
+  AggregationResult:
+    type: object
+    properties:
+      name: 
+        type: string
+        description: The name of the aggregation
+      type: 
+        $ref: "#/definitions/FilterType"
+      totalCount: 
+        type: integer
+        format: int64
+        description: The count of data sets that have a value defined for this aggregation
+      entries:
+        type: array
+        items:
+          $ref: "#/definitions/AggregationResultEntry"
+  AggregationResultEntry:
+    type: object
+    properties:
+      key:
+        type: string
+        description: The value of this aggregation entry
+      count:
+        type: integer
+        format: int64
+        description: The count of data sets that match this aggregation value
+      subEntries:
+        type: array
+        items:
+          $ref: "#/definitions/AggregationResultEntry"
+paths:
+  /search:
+    get:
+      summary: Search for data sets (numeric filters can use '<', '>', and ',' to specify ranges). e.g. validUntilYear=<2010 or validUntilYear=2000,2010 (all data sets in between 2000 and 2010). Boolean filters accept 'true' and 'false'
+      parameters:
+        - name: query
+          in: query
+          type: string
+          description: A full text search query. Mulitple words are conjucted with AND
+        - name: sortBy
+          in: query
+          type: string
+          description: The name of the field to sort the results by, scoring will be disabled when using sortBy
+        - name: sortOrder
+          in: query
+          type: string
+          enum: [ASC, DESC]
+          default: ASC
+          description: The sort order when sortBy is specified
+        - name: page
+          in: query
+          type: integer
+          format: int64
+          default: 1
+          description: The page of the result of the current query, a value of 0 means no paging is applied
+        - name: pageSize
+          in: query
+          type: integer
+          format: int64
+          default: 10
+          minimum: 1
+          maximum: 10000
+          description: The size of a page of the result of the current query
+        - name: queryFields
+          in: query
+          type: string
+          description: A comma separated list of fields to use for querying, if none is specified, all available fields will be queried (name, description, category, technology)
+        - name: aggregate
+          in: query
+          type: string
+          description: Specify which aggregations should be applied and returned. If none is specified, all available aggregations will be applied (supportedNomenclatures, multifunctionalModeling, modelingType, aggregationType, co2pePaths, categoryPaths, biogenicCarbonModeling, copyrightProtected, reviewType, unspscPaths, waterModeling, lciaMethods, representativenessType, validFromYear, publiclyAccessible, emissionModeling, infrastructureModeling, processType, free, sourceReliability, endOfLifeModeling, format, reviewSystem, location, validUntilYear, carbonStorageModeling, dataprovider)
+        - name: score-amountDeviation
+          in: query
+          type: string
+          description: The results will be scored by the amountDeviation value (Only specify the parameter name, no value required)
+        - name: score-completeness
+          in: query
+          type: string
+          description: The results will be scored by the completeness value (Only specify the parameter name, no value required)
+        - name: score-representativeness
+          in: query
+          type: string
+          description: The results will be scored by the representativeness value (Only specify the parameter name, no value required)
+        - name: score-time
+          in: query
+          type: string
+          description: The results will be scored by the time information, specify a long value as a date The results will be scored according to the difference to the specified date. 
+        - name: score-geography
+          in: query
+          type: string
+          description: The results will be scored by the geography information, specify latitude and longitude as double values, separated by a comma (52.13,42.12). The results will be scored according to the distance to the specified location. 
+        - name: score-technology
+          in: query
+          type: string
+          description: The results will be scored by the technology information, specify a UNSPSC code and CO2PE code, separated by a comma (e.g. 50454302,1.1.1). The results will be scored according to a combination of assessed differences to the specified technology information.
+        - name: format
+          in: query
+          type: string
+          description: A filter for the format field
+        - name: location
+          in: query
+          type: string
+          description: A filter for the location field
+        - name: dataprovider
+          in: query
+          type: string
+          description: A filter for the dataprovider field
+        - name: supportedNomenclatures
+          in: query
+          type: string
+          description: A filter for the supportedNomenclatures field
+        - name: lciaMethods
+          in: query
+          type: string
+          description: A filter for the lciaMethods field
+        - name: categoryPaths
+          in: query
+          type: string
+          description: A filter for the categoryPaths field
+        - name: unspscPaths
+          in: query
+          type: string
+          description: A filter for the unspscPaths field
+        - name: co2pePaths
+          in: query
+          type: string
+          description: A filter for the co2pePaths field
+        - name: processType
+          in: query
+          type: string
+          description: A filter for the processType field
+        - name: representativenessType
+          in: query
+          type: string
+          description: A filter for the representativenessType field
+        - name: modelingType
+          in: query
+          type: string
+          description: A filter for the modelingType field
+        - name: multifunctionalModeling
+          in: query
+          type: string
+          description: A filter for the multifunctionalModeling field
+        - name: biogenicCarbonModeling
+          in: query
+          type: string
+          description: A filter for the biogenicCarbonModeling field
+        - name: endOfLifeModeling
+          in: query
+          type: string
+          description: A filter for the endOfLifeModeling field
+        - name: waterModeling
+          in: query
+          type: string
+          description: A filter for the waterModeling field
+        - name: infrastructureModeling
+          in: query
+          type: string
+          description: A filter for the infrastructureModeling field
+        - name: emissionModeling
+          in: query
+          type: string
+          description: A filter for the emissionModeling field
+        - name: carbonStorageModeling
+          in: query
+          type: string
+          description: A filter for the carbonStorageModeling field
+        - name: sourceReliability
+          in: query
+          type: string
+          description: A filter for the sourceReliability field
+        - name: aggregationType
+          in: query
+          type: string
+          description: A filter for the aggregationType field
+        - name: reviewType
+          in: query
+          type: string
+          description: A filter for the reviewType field
+        - name: reviewSystem
+          in: query
+          type: string
+          description: A filter for the reviewSystem field
+        - name: copyrightHolder
+          in: query
+          type: string
+          description: A filter for the copyrightHolder field
+        - name: contact
+          in: query
+          type: string
+          description: A filter for the contact field
+        - name: reviewers
+          in: query
+          type: string
+          description: A filter for the reviewers field
+        - name: validFrom
+          in: query
+          type: integer
+          format: int64
+          description: A filter for the validFrom field
+        - name: validUntil
+          in: query
+          type: integer
+          format: int64
+          description: A filter for the validUntil field
+        - name: validFromYear
+          in: query
+          type: integer
+          format: int32
+          description: A filter for the validFromYear field
+        - name: validUntilYear
+          in: query
+          type: integer
+          format: int32
+          description: A filter for the validUntilYear field
+        - name: latitude
+          in: query
+          type: number
+          format: double
+          description: A filter for the latitude field
+        - name: longitude
+          in: query
+          type: number
+          format: double
+          description: A filter for the longitude field
+        - name: completeness
+          in: query
+          type: number
+          format: double
+          description: A filter for the completeness field
+        - name: amountDeviation
+          in: query
+          type: number
+          format: double
+          description: A filter for the amountDeviation field
+        - name: representativenessValue
+          in: query
+          type: number
+          format: double
+          description: A filter for the representativenessValue field
+        - name: copyrightProtected
+          in: query
+          type: boolean
+          description: A filter for the copyrightProtected field
+        - name: free
+          in: query
+          type: boolean
+          description: A filter for the free field
+        - name: publiclyAccessible
+          in: query
+          type: boolean
+          description: A filter for the publiclyAccessible field
+      responses:
+        200:
+          description: The search result
+          schema:
+            $ref: "#/definitions/Result"
+        400:
+          description: One of the filter values is not allowed
+          schema: 
+            type: string
+  "/search/index":
+    post:
+      summary: Submit a new data set to the index
+      consumes:
+        - application/json
+      parameters:
+        - in: header
+          name: api-key
+          type: string
+          required: true
+          description: The API key to perform secured actions
+        - in: body
+          name: dataSet
+          required: true
+          description: The data set descriptor to index
+          schema:
+            $ref: "#/definitions/DataSet"
+      responses:
+        201:
+          description: The data set was successfully added to the index
+        409:
+          description: A data set with the posted refId already existed
+        422:
+          description: The posted data set was invalid
+  "/search/index/{refId}":
+    get:
+      summary: Returns the data set with the given refId from the index
+      consumes: [application/json]
+      parameters:
+        - in: header
+          name: api-key
+          type: string
+          required: true
+          description: The API key to perform secured actions
+        - in: path
+          name: refId
+          required: true
+          description: The refId of the data set
+          type: string
+      responses:
+        200: 
+          description: The data set was found and returned
+          schema:
+            $ref: "#/definitions/DataSet"
+        404:
+          description: The data set did not exist
+    put:
+      summary: Submits a new or updated version of a data set to the index
+      consumes: [application/json]
+      parameters:
+        - in: header
+          name: api-key
+          type: string
+          required: true
+          description: The API key to perform secured actions
+        - in: path
+          name: refId
+          required: true
+          description: The refId of the data set, this must match the posted data
+          type: string
+        - in: body
+          name: dataSet
+          required: true
+          description: The data set descriptor to index
+          schema:
+            $ref: "#/definitions/DataSet"
+      responses:
+        201:
+          description: The data set was successfully added to the index
+        204:
+          description: The data set was successfully updated in the index
+        422:
+          description: The posted data set was invalid
+    delete:
+      summary: Deletes an existing data set from the index
+      consumes: [application/json]
+      parameters:
+        - in: header
+          name: api-key
+          type: string
+          required: true
+          description: The API key to perform secured actions
+        - in: path
+          name: refId
+          required: true
+          description: The refId of the data set
+          type: string
+      responses:
+        204:
+          description: The data set either succesfully deleted or did not exist

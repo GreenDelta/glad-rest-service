@@ -121,6 +121,8 @@ class Data {
 	}
 
 	private static void checkDate(String field, Object v) throws InvalidInputException {
+		if (v == null)
+			return;
 		String value = v.toString();
 		if (value.contains(",")) {
 			int index = value.indexOf(',');
@@ -157,6 +159,8 @@ class Data {
 	}
 
 	private static void checkString(String field, Object v) throws InvalidInputException {
+		if (v == null)
+			return;
 		String value = v.toString();
 		Set<String> valid = VALID_VALUES.get(field);
 		if (valid == null || valid.contains(value))

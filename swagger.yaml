@@ -22,7 +22,7 @@ definitions:
     default: EXPERT_BASED
   ModelingType:
     type: string
-    enum: [ATTRIBUTIONAL, CONSEQUENTIAL, UNKNOWN]    
+    enum: [ATTRIBUTIONAL, CONSEQUENTIAL, BEFORE_MODELING, UNKNOWN]    
     default: UNKNOWN
   MultifunctionalModeling:
     type: string

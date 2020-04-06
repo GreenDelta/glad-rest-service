@@ -17,6 +17,7 @@ public interface Types {
 
 	public enum ModelingType {
 		ATTRIBUTIONAL,
+		BEFORE_MODELING,
 		CONSEQUENTIAL,
 		UNKNOWN;
 	}

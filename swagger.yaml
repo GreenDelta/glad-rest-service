@@ -114,8 +114,10 @@ definitions:
         type: string
         description: The name of the provider of the data set
       supportedNomenclatures:
-        type: string
-        description: The nomenclatures, the data set is compliant to
+        type: array
+        description: The nomenclatures the data set is compliant to
+        items:
+          type: string
       lciaMethods:
         type: array
         description: A list of supported LCIA methods

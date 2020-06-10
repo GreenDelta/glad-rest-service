@@ -70,7 +70,7 @@ definitions:
     default: NOT_APPLICABLE
   Format:
     type: string
-    enum: [ECOSPOLD1, ECOSPOLD2, ILCD, JSON-LD, OTHER, UNKNOWN]  
+    enum: [ECOSPOLD1, ECOSPOLD2, ILCD, JSON_LD, OTHER, UNKNOWN]  
   Result:
     type: object
     properties:

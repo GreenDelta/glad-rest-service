@@ -6,10 +6,11 @@ A detailed documentation of the REST service is found [here](https://rawgit.com/
 ## Build from source
 
 #### Dependent modules
-In order to build the GLAD rest service application, you will need to install the search-wrapper API and the elasticsearch implementation of the API, search-wrapper-es.
+In order to build the GLAD rest service application, you will need to install the search-wrapper API and the opensearch implementation of the API, search-wrapper-es.
 These are plain Maven projects and can be installed via `mvn install`. See the
 [search-wrapper](https://github.com/GreenDelta/search-wrapper) and 
-[search-wrapper-es](https://github.com/GreenDelta/search-wrapper-es) repositories for more
+[search-wrapper-os](https://github.com/GreenDelta/search-wrapper-os) and
+[search-wrapper-os-rest](https://github.com/GreenDelta/search-wrapper-os-rest) repositories for more
 information.
 
 #### Get the source code of the application
@@ -34,12 +35,12 @@ Now you can build the glad-rest-service application with `mvn package`, which wi
 #### Configuration
 The build war file contains a file /WEB-INF/classes/com/greendelta/search/glad/rest/app.properties.
 
-You will need to specify the correct elasticsearch configuration in the `search.*` fields, before deploying the application. Also you should replace the api.key value with a randomly generated UUID.
+You will need to specify the correct opensearch configuration in the `search.*` fields, before deploying the application. Also you should replace the api.key value with a randomly generated UUID.
 
 ```
 api.key: This is used to verify authentication to perform indexing requests on the GLAD rest service
-search.cluster: The elasticsearch cluster (default: elasticsearch)
-search.host: The elasticsearch host (if installed on the same server: localhost)
+search.cluster: The opensearch cluster (default: opensearch)
+search.host: The opensearch host (if installed on the same server: localhost)
 search.index: The index used for the application instance (default: glad)
 ```
 The search index will be created on application start, if not already existing.
@@ -47,10 +48,10 @@ The search index will be created on application start, if not already existing.
 ## Server configuration
 In order to install the application a Java Runtime Environment >= 8 and a servlet container (e.g. tomcat 8) needs to be installed.
 
-As server hardware, we recommend to configure elasticsearch with at least 2GB heap space, the same goes for the servlet container. This is not the minimum requirements, but rather a recommendation for use in production for a moderate amount of simultaneous requests.
+As server hardware, we recommend to configure opensearch with at least 2GB heap space, the same goes for the servlet container. This is not the minimum requirements, but rather a recommendation for use in production for a moderate amount of simultaneous requests.
 
-#### Elasticsearch
-Before deploying the application to the servlet container you will need to set up elasticsearch. For more information on the elasticsearch installation, please take a look at the [official documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html).
+#### opensearch
+Before deploying the application to the servlet container you will need to set up opensearch. For more information on the opensearch installation, please take a look at the [official documentation](https://opensearch.org/docs/latest/opensearch/install/index/).
 
 ##### Deployment
 Now you can deploy the application (war-file) on the servlet container.

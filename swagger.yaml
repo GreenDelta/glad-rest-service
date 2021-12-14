@@ -22,7 +22,7 @@ definitions:
     default: EXPERT_BASED
   ModelingType:
     type: string
-    enum: [ATTRIBUTIONAL, CONSEQUENTIAL, UNKNOWN]    
+    enum: [ATTRIBUTIONAL, CONSEQUENTIAL, BEFORE_MODELING, UNKNOWN]    
     default: UNKNOWN
   MultifunctionalModeling:
     type: string
@@ -114,8 +114,10 @@ definitions:
         type: string
         description: The name of the provider of the data set
       supportedNomenclatures:
-        type: string
-        description: The nomenclatures, the data set is compliant to
+        type: array
+        description: The nomenclatures the data set is compliant to
+        items:
+          type: string
       lciaMethods:
         type: array
         description: A list of supported LCIA methods

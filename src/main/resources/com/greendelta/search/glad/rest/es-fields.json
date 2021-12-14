@@ -1,147 +1,143 @@
 {
-	"PROCESS": {
-		"properties": {
-			"name": {
-				"type": "text"
-			},
-			"category": {
-				"type": "text"
-			},
-			"description": {
-				"type": "text"
-			},
-			"technology": {
-				"type": "text"
-			},
-			"refId": {
-				"type": "keyword"
-			},
-			"dataSetUrl": {
-				"type": "keyword"
-			},
-			"format": {
-				"type": "keyword"
-			},
-			"location": {
-				"type": "keyword"
-			},
-			"dataprovider": {
-				"type": "keyword"
-			},
-			"categoryPaths": {
-				"type": "keyword"
-			},
-			"supportedNomenclatures": {
-				"type": "keyword"
-			},
-			"lciaMethods": {
-				"type": "keyword"
-			},
-			"unspscPaths": {
-				"type": "keyword"
-			},
-			"co2pePaths": {
-				"type": "keyword"
-			},
-			"processType": {
-				"type": "keyword"
-			},
-			"representativenessType": {
-				"type": "keyword"
-			},
-			"modelingType": {
-				"type": "keyword"
-			},
-			"multifunctionalModeling": {
-				"type": "keyword"
-			},
-			"biogenicCarbonModeling": {
-				"type": "keyword"
-			},
-			"endOfLifeModeling": {
-				"type": "keyword"
-			},
-			"waterModeling": {
-				"type": "keyword"
-			},
-			"infrastructureModeling": {
-				"type": "keyword"
-			},
-			"emissionModeling": {
-				"type": "keyword"
-			},
-			"carbonStorageModeling": {
-				"type": "keyword"
-			},
-			"sourceReliability": {
-				"type": "keyword"
-			},
-			"aggregationType": {
-				"type": "keyword"
-			},
-			"reviewType": {
-				"type": "keyword"
-			},
-			"reviewSystem": {
-				"type": "keyword"
-			},
-			"unspscCode": {
-				"type": "keyword"
-			},
-			"co2peCode": {
-				"type": "keyword"
-			},
-			"copyrightHolder": {
-				"type": "keyword"
-			},
-			"license": {
-				"type": "keyword"
-			},
-			"contact": {
-				"type": "keyword"
-			},
-			"categories": {
-				"type": "keyword"
-			},
-			"reviewers": {
-				"type": "keyword"
-			},
-			"validFrom": {
-				"type": "long"
-			},
-			"validUntil": {
-				"type": "long"
-			},
-			"validFromYear": {
-				"type": "integer"
-			},
-			"validUntilYear": {
-				"type": "integer"
-			},
-			"latitude": {
-				"type": "double"
-			},
-			"longitude": {
-				"type": "double"
-			},
-			"completeness": {
-				"type": "double"
-			},
-			"amountDeviation": {
-				"type": "double"
-			},
-			"representativenessValue": {
-				"type": "double"
-			},
-			"copyrightProtected": {
-				"type": "boolean"
-			},
-			"free": {
-				"type": "boolean"
-			},
-			"publiclyAccessible": {
-				"type": "boolean"
-			}
-		}
+	"name": {
+		"type": "text"
+	},
+	"category": {
+		"type": "text"
+	},
+	"description": {
+		"type": "text"
+	},
+	"technology": {
+		"type": "text"
+	},
+	"refId": {
+		"type": "keyword"
+	},
+	"dataSetUrl": {
+		"type": "keyword"
+	},
+	"format": {
+		"type": "keyword"
+	},
+	"location": {
+		"type": "keyword"
+	},
+	"dataprovider": {
+		"type": "keyword"
+	},
+	"categoryPaths": {
+		"type": "keyword"
+	},
+	"supportedNomenclatures": {
+		"type": "keyword"
+	},
+	"lciaMethods": {
+		"type": "keyword"
+	},
+	"unspscPaths": {
+		"type": "keyword"
+	},
+	"co2pePaths": {
+		"type": "keyword"
+	},
+	"processType": {
+		"type": "keyword"
+	},
+	"representativenessType": {
+		"type": "keyword"
+	},
+	"modelingType": {
+		"type": "keyword"
+	},
+	"multifunctionalModeling": {
+		"type": "keyword"
+	},
+	"biogenicCarbonModeling": {
+		"type": "keyword"
+	},
+	"endOfLifeModeling": {
+		"type": "keyword"
+	},
+	"waterModeling": {
+		"type": "keyword"
+	},
+	"infrastructureModeling": {
+		"type": "keyword"
+	},
+	"emissionModeling": {
+		"type": "keyword"
+	},
+	"carbonStorageModeling": {
+		"type": "keyword"
+	},
+	"sourceReliability": {
+		"type": "keyword"
+	},
+	"aggregationType": {
+		"type": "keyword"
+	},
+	"reviewType": {
+		"type": "keyword"
+	},
+	"reviewSystem": {
+		"type": "keyword"
+	},
+	"unspscCode": {
+		"type": "keyword"
+	},
+	"co2peCode": {
+		"type": "keyword"
+	},
+	"copyrightHolder": {
+		"type": "keyword"
+	},
+	"license": {
+		"type": "keyword"
+	},
+	"contact": {
+		"type": "keyword"
+	},
+	"categories": {
+		"type": "keyword"
+	},
+	"reviewers": {
+		"type": "keyword"
+	},
+	"validFrom": {
+		"type": "long"
+	},
+	"validUntil": {
+		"type": "long"
+	},
+	"validFromYear": {
+		"type": "integer"
+	},
+	"validUntilYear": {
+		"type": "integer"
+	},
+	"latitude": {
+		"type": "double"
+	},
+	"longitude": {
+		"type": "double"
+	},
+	"completeness": {
+		"type": "double"
+	},
+	"amountDeviation": {
+		"type": "double"
+	},
+	"representativenessValue": {
+		"type": "double"
+	},
+	"copyrightProtected": {
+		"type": "boolean"
+	},
+	"free": {
+		"type": "boolean"
+	},
+	"publiclyAccessible": {
+		"type": "boolean"
 	}
 }

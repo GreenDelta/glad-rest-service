@@ -1,26 +1,23 @@
 package com.greendelta.search.glad.rest;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.settings.Settings.Builder;
-import org.elasticsearch.common.transport.TransportAddress;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.apache.http.HttpHost;
+import org.opensearch.client.RestClient;
+import org.opensearch.client.RestHighLevelClient;
 
 import com.greendelta.search.wrapper.SearchClient;
-import com.greendelta.search.wrapper.es.EsClient;
+import com.greendelta.search.wrapper.os.OsRestClient;
 
 public class SearchInitializer implements ServletContextListener {
 
 	private static SearchClient client;
-	private static TransportClient tClient;
+	private static RestHighLevelClient tClient;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -28,19 +25,17 @@ public class SearchInitializer implements ServletContextListener {
 	}
 
 	private static void createClient() {
-		String cluster = Util.getProperty("search.cluster");
 		String host = Util.getProperty("search.host");
 		String index = Util.getProperty("search.index");
-		Builder settingsBuilder = Settings.builder()
-				.put("cluster.name", cluster);
-		Settings settings = settingsBuilder.build();
-		tClient = new PreBuiltTransportClient(settings);
-		try {
-			tClient.addTransportAddress(new TransportAddress(InetAddress.getByName(host), 9300));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		String portString = Util.getProperty("search.port");
+		if (portString == null || portString.isEmpty()) {
+			portString = "9200";
 		}
-		client = new EsClient(tClient, index, "PROCESS");
+		int port = Integer.parseInt(portString);
+		tClient = new RestHighLevelClient(RestClient.builder(
+				new HttpHost(host, port, "http"),
+				new HttpHost(host, port + 1, "http")));
+		client = new OsRestClient(tClient, index);
 		Map<String, String> indexSettings = new HashMap<>();
 		indexSettings.put("config", Util.getResource("es-settings.json"));
 		indexSettings.put("mapping", Util.getResource("es-fields.json"));
@@ -51,7 +46,10 @@ public class SearchInitializer implements ServletContextListener {
 	public void contextDestroyed(ServletContextEvent sce) {
 		if (tClient == null)
 			return;
-		tClient.close();
+		try {
+			tClient.close();
+		} catch (IOException e) {
+		}
 	}
 
 	static SearchClient getClient() {
